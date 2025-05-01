@@ -123,3 +123,30 @@
     box-shadow: none;
   }
   /* ================================= Typography Css End =========================== */
+
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    --bs-table-color-type: var(--bs-table-striped-color) !important;
+    --bs-table-bg-type: var(--bs-table-striped-bg) !important;
+}
+
+select {
+    background-position: right 0rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+div.dt-container select.dt-input {
+    padding: 5px 15px;
+    margin-right: 10px;
+}
+
+.alert-success {
+    --bs-alert-color: var(--bs-white);
+    --bs-alert-bg: var(--bs-success);
+    --bs-alert-border-color: var(--bs-success);
+    --bs-alert-link-color: var(--bs-success-text-emphasis);
+}

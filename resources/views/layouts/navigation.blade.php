@@ -11,7 +11,7 @@
     <div class="sidebar-menu-wrapper overflow-y-auto scroll-sm">
         <div class="p-20 pt-10">
             <ul class="sidebar-menu">
-                <li class="sidebar-menu__item">
+                <li class="sidebar-menu__item {{ request()->is('admin/dashboard*') ? 'activePage' : (request()->is('siswa/dashboard*') ? 'activePage' : '') }}">
                     <a href="{{route('dashboard')}}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-squares-four"></i></span>
                         <span class="text">Dashboard</span>
@@ -34,8 +34,8 @@
                 @endif
 
                 @if(Auth::user()->hasAdminAccess())
-                <li class="sidebar-menu__item">
-                    <a href="siswa.php" class="sidebar-menu__link">
+                <li class="sidebar-menu__item {{ request()->is('admin/tahun_ajaran*') ? 'activePage' : '' }}">
+                    <a href="{{ route('admin.tahun_ajaran.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-film-script"></i></span>
                         <span class="text">Tahun Ajaran</span>
                     </a>
