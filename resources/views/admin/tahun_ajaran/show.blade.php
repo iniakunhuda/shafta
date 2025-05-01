@@ -43,31 +43,31 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
-                            <span class="text-gray-500">Nama Tahun Ajaran</span>
+                            <span class="text-gray-400 mb-2 fw-normal">Nama Tahun Ajaran</span>
                             <span class="h5 fw-semibold">{{ $tahunAjaran->nama }}</span>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
-                            <span class="text-gray-500">Semester</span>
+                            <span class="text-gray-400 mb-2 fw-normal">Semester</span>
                             <span class="h5 fw-semibold">{{ $tahunAjaran->semester }}</span>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
-                            <span class="text-gray-500">Tanggal Mulai</span>
+                            <span class="text-gray-400 mb-2 fw-normal">Tanggal Mulai</span>
                             <span class="h5 fw-semibold">{{ $tahunAjaran->start_date->format('d F Y') }}</span>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
-                            <span class="text-gray-500">Tanggal Selesai</span>
+                            <span class="text-gray-400 mb-2 fw-normal">Tanggal Selesai</span>
                             <span class="h5 fw-semibold">{{ $tahunAjaran->end_date->format('d F Y') }}</span>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
-                            <span class="text-gray-500">Status</span>
+                            <span class="text-gray-400 mb-2 fw-normal">Status</span>
                             @if ($tahunAjaran->is_active)
                                 <span class="text-13 py-2 px-8 bg-success-50 text-success-600 d-inline-flex align-items-center gap-8 rounded-pill" style="width: fit-content;">
                                     <span class="w-6 h-6 bg-success-600 rounded-circle flex-shrink-0"></span>
@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
-                            <span class="text-gray-500">Waktu Dibuat</span>
+                            <span class="text-gray-400 mb-2 fw-normal">Waktu Dibuat</span>
                             <span class="h5 fw-semibold">{{ $tahunAjaran->created_at->format('d F Y H:i:s') }}</span>
                         </div>
                     </div>
