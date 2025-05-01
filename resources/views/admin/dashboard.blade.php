@@ -11,143 +11,145 @@
         Dashboard
     </x-slot>
 
-    <div class="row gy-4">
-        <div class="col-lg-9">
-            <!-- Grettings Box Start -->
-            <div class="grettings-box position-relative rounded-16 bg-main-600 overflow-hidden gap-16 flex-wrap z-1">
-                <img src="assets/images/bg/grettings-pattern.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 opacity-6">
-                <div class="row gy-4">
-                    <div class="col-sm-7">
-                        <div class="grettings-box__content py-xl-4">
-                            <h2 class="text-white mb-0">Hello, Admin! </h2>
-                            <p class="text-15 fw-light mt-4 text-white">Selamat datang di Shafta E-Raport</p>
-                            <p class="text-lg fw-light mt-24 text-white">Semester 1 &mdash; 2025/2026</p>
+    <main>
+        <div class="row gy-4">
+            <div class="col-lg-9">
+                <!-- Grettings Box Start -->
+                <div class="grettings-box position-relative rounded-16 bg-main-600 overflow-hidden gap-16 flex-wrap z-1">
+                    <img src="{{ asset('assets/images/bg/grettings-pattern.png') }}" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 opacity-6">
+                    <div class="row gy-4">
+                        <div class="col-sm-7">
+                            <div class="grettings-box__content py-xl-4">
+                                <h2 class="text-white mb-0">Hello, Admin! </h2>
+                                <p class="text-15 fw-light mt-4 text-white">Selamat datang di Shafta E-Raport</p>
+                                <p class="text-lg fw-light mt-24 text-white">Semester 1 &mdash; 2025/2026</p>
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-5 d-sm-block d-none">
+                            <div class="text-center h-100 d-flex justify-content-center align-items-end ">
+                                <img src="assets/images/thumbs/e-raport.jpg" alt="">
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <!-- Grettings Box End -->
+
+                <!-- Top Course Start -->
+                <div class="card mt-24">
+                    <div class="card-body">
+                        <div class="mb-20 flex-between flex-wrap gap-8">
+                            <h4 class="mb-0">Rata - Rata Nilai Siswa</h4>
+                            <div class="flex-align gap-16 flex-wrap">
+                                <div class="flex-align flex-wrap gap-16">
+                                    <div class="flex-align flex-wrap gap-8">
+                                        <span class="w-8 h-8 rounded-circle bg-main-600"></span>
+                                        <span class="text-13 text-gray-600">Nilai Umum</span>
+                                    </div>
+                                    <div class="flex-align flex-wrap gap-8">
+                                        <span class="w-8 h-8 rounded-circle bg-main-two-600"></span>
+                                        <span class="text-13 text-gray-600">Nilai Keshaftaan</span>
+                                    </div>
+                                </div>
+                                <select class="form-select form-control text-13 px-8 pe-24 py-8 rounded-8 w-auto">
+                                    <option value="1">Yearly</option>
+                                    <option value="1">Monthly</option>
+                                    <option value="1">Weekly</option>
+                                    <option value="1">Today</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="doubleLineChart" class="tooltip-style y-value-left"></div>
+
+                    </div>
+                </div>
+                <!-- Top Course End -->
+
+            </div>
+
+            <div class="col-lg-3">
+
+                <!-- Calendar Start -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="calendar">
+                            <div class="calendar__header">
+                                <button type="button" class="calendar__arrow left"><i class="ph ph-caret-left"></i></button>
+                                <p class="display h6 mb-0">""</p>
+                                <button type="button" class="calendar__arrow right"><i class="ph ph-caret-right"></i></button>
+                            </div>
+
+                            <div class="calendar__week week">
+                                <div class="calendar__week-text">Su</div>
+                                <div class="calendar__week-text">Mo</div>
+                                <div class="calendar__week-text">Tu</div>
+                                <div class="calendar__week-text">We</div>
+                                <div class="calendar__week-text">Th</div>
+                                <div class="calendar__week-text">Fr</div>
+                                <div class="calendar__week-text">Sa</div>
+                            </div>
+                            <div class="days"></div>
                         </div>
                     </div>
-                    <!-- <div class="col-sm-5 d-sm-block d-none">
-                        <div class="text-center h-100 d-flex justify-content-center align-items-end ">
-                            <img src="assets/images/thumbs/e-raport.jpg" alt="">
-                        </div>
-                    </div> -->
                 </div>
-            </div>
-            <!-- Grettings Box End -->
+                <!-- Calendar End -->
 
-            <!-- Top Course Start -->
-            <div class="card mt-24">
-                <div class="card-body">
-                    <div class="mb-20 flex-between flex-wrap gap-8">
-                        <h4 class="mb-0">Rata - Rata Nilai Siswa</h4>
-                        <div class="flex-align gap-16 flex-wrap">
-                            <div class="flex-align flex-wrap gap-16">
-                                <div class="flex-align flex-wrap gap-8">
-                                    <span class="w-8 h-8 rounded-circle bg-main-600"></span>
-                                    <span class="text-13 text-gray-600">Nilai Umum</span>
-                                </div>
-                                <div class="flex-align flex-wrap gap-8">
-                                    <span class="w-8 h-8 rounded-circle bg-main-two-600"></span>
-                                    <span class="text-13 text-gray-600">Nilai Keshaftaan</span>
+
+                <!-- Assignment Start -->
+                <div class="card mt-24">
+                    <div class="card-body">
+                        <div class="mb-20 flex-between flex-wrap gap-8">
+                            <h4 class="mb-0">Semester</h4>
+                            <!-- <a href="assignment.html" class="text-13 fw-medium text-main-600 hover-text-decoration-underline">See All</a> -->
+                        </div>
+                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
+                            <div class="flex-align flex-wrap gap-8">
+                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
+                                <div>
+                                    <h6 class="mb-0">Semester 1</h6>
+                                    <span class="text-13 text-gray-400">2023/2024</span>
                                 </div>
                             </div>
-                            <select class="form-select form-control text-13 px-8 pe-24 py-8 rounded-8 w-auto">
-                                <option value="1">Yearly</option>
-                                <option value="1">Monthly</option>
-                                <option value="1">Weekly</option>
-                                <option value="1">Today</option>
-                            </select>
+                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
+                        </div>
+                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
+                            <div class="flex-align flex-wrap gap-8">
+                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
+                                <div>
+                                    <h6 class="mb-0">Semester 2</h6>
+                                    <span class="text-13 text-gray-400">2023/2024</span>
+                                </div>
+                            </div>
+                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
+                        </div>
+                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
+                            <div class="flex-align flex-wrap gap-8">
+                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
+                                <div>
+                                    <h6 class="mb-0">Semester 1</h6>
+                                    <span class="text-13 text-gray-400">2024/2025</span>
+                                </div>
+                            </div>
+                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
+                        </div>
+                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
+                            <div class="flex-align flex-wrap gap-8">
+                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
+                                <div>
+                                    <h6 class="mb-0">Semester 2</h6>
+                                    <span class="text-13 text-gray-400">2024/2025</span>
+                                </div>
+                            </div>
+                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
                         </div>
                     </div>
-
-                    <div id="doubleLineChart" class="tooltip-style y-value-left"></div>
-
                 </div>
+                <!-- Assignment End -->
+
             </div>
-            <!-- Top Course End -->
 
         </div>
-
-        <div class="col-lg-3">
-
-            <!-- Calendar Start -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="calendar">
-                        <div class="calendar__header">
-                            <button type="button" class="calendar__arrow left"><i class="ph ph-caret-left"></i></button>
-                            <p class="display h6 mb-0">""</p>
-                            <button type="button" class="calendar__arrow right"><i class="ph ph-caret-right"></i></button>
-                        </div>
-
-                        <div class="calendar__week week">
-                            <div class="calendar__week-text">Su</div>
-                            <div class="calendar__week-text">Mo</div>
-                            <div class="calendar__week-text">Tu</div>
-                            <div class="calendar__week-text">We</div>
-                            <div class="calendar__week-text">Th</div>
-                            <div class="calendar__week-text">Fr</div>
-                            <div class="calendar__week-text">Sa</div>
-                        </div>
-                        <div class="days"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- Calendar End -->
-
-
-            <!-- Assignment Start -->
-            <div class="card mt-24">
-                <div class="card-body">
-                    <div class="mb-20 flex-between flex-wrap gap-8">
-                        <h4 class="mb-0">Semester</h4>
-                        <!-- <a href="assignment.html" class="text-13 fw-medium text-main-600 hover-text-decoration-underline">See All</a> -->
-                    </div>
-                    <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                        <div class="flex-align flex-wrap gap-8">
-                            <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                            <div>
-                                <h6 class="mb-0">Semester 1</h6>
-                                <span class="text-13 text-gray-400">2023/2024</span>
-                            </div>
-                        </div>
-                        <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                    </div>
-                    <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                        <div class="flex-align flex-wrap gap-8">
-                            <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                            <div>
-                                <h6 class="mb-0">Semester 2</h6>
-                                <span class="text-13 text-gray-400">2023/2024</span>
-                            </div>
-                        </div>
-                        <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                    </div>
-                    <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                        <div class="flex-align flex-wrap gap-8">
-                            <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                            <div>
-                                <h6 class="mb-0">Semester 1</h6>
-                                <span class="text-13 text-gray-400">2024/2025</span>
-                            </div>
-                        </div>
-                        <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                    </div>
-                    <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                        <div class="flex-align flex-wrap gap-8">
-                            <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                            <div>
-                                <h6 class="mb-0">Semester 2</h6>
-                                <span class="text-13 text-gray-400">2024/2025</span>
-                            </div>
-                        </div>
-                        <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                    </div>
-                </div>
-            </div>
-            <!-- Assignment End -->
-
-        </div>
-
-    </div>
+    </main>
 
     <x-slot name="scripts">
         <script>
