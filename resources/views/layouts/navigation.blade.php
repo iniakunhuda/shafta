@@ -1,100 +1,105 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+<aside class="sidebar">
+    <!-- sidebar close btn -->
+     <button type="button" class="sidebar-close-btn text-gray-500 hover-text-white hover-bg-main-600 text-md w-24 h-24 border border-gray-100 hover-border-main-600 d-xl-none d-flex flex-center rounded-circle position-absolute"><i class="ph ph-x"></i></button>
+    <!-- sidebar close btn -->
+
+    <a href="{{route('dashboard')}}" class="sidebar__logo text-center p-20 position-sticky inset-block-start-0 bg-white w-100 z-1 pb-10">
+        <img src="{{ asset('assets/images/logo/logo-shafta.png') }}" alt="Logo">
+    </a>
+
+
+    <div class="sidebar-menu-wrapper overflow-y-auto scroll-sm">
+        <div class="p-20 pt-10">
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu__item">
+                    <a href="{{route('dashboard')}}" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-squares-four"></i></span>
+                        <span class="text">Dashboard</span>
                     </a>
-                </div>
+                </li>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-            </div>
+                @if(Auth::user()->isSiswa())
+                <li class="sidebar-menu__item">
+                    <a href="/siswa/raport.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-book-open-text"></i></span>
+                        <span class="text">Lihat Raport</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu__item">
+                    <a href="/siswa/detail-raport.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-book"></i></span>
+                        <span class="text">Detail Raport</span>
+                    </a>
+                </li>
+                @endif
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                @if(Auth::user()->hasAdminAccess())
+                <li class="sidebar-menu__item">
+                    <a href="siswa.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-film-script"></i></span>
+                        <span class="text">Tahun Ajaran</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu__item">
+                    <a href="siswa.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-door-open"></i></span>
+                        <span class="text">Kelas</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu__item">
+                    <a href="siswa.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-users-three"></i></span>
+                        <span class="text">Siswa</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu__item">
+                    <a href="upload-raport.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-book-open-text"></i></span>
+                        <span class="text">Nilai Raport</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu__item">
+                    <a href="upload-raport.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-upload"></i></span>
+                        <span class="text">Upload Nilai Raport</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu__item">
+                    <a href="kalender.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-calendar-dots"></i></span>
+                        <span class="text">Kalender</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu__item">
+                    <span class="text-gray-300 text-sm px-20 pt-20 fw-semibold border-top border-gray-100 d-block text-uppercase">Pengaturan</span>
+                </li>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+                @if(Auth::user()->isSuperAdmin())
+                <li class="sidebar-menu__item">
+                    <a href="sekolah.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-user-check"></i></span>
+                        <span class="text">Akun Admin</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu__item">
+                    <a href="sekolah.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-user"></i></span>
+                        <span class="text">Akun Siswa</span>
+                    </a>
+                </li>
+                @endif
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+                <li class="sidebar-menu__item">
+                    <a href="setting.php" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-gear"></i></span>
+                        <span class="text">Pengaturan</span>
+                    </a>
+                </li>
+                @endif
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+            </ul>
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
+</aside>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
-    </div>
-</nav>
