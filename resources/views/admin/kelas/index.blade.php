@@ -38,6 +38,7 @@
                         <tr>
                             <th class="h6 text-gray-300">No</th>
                             <th class="h6 text-gray-300">Nama</th>
+                            <th class="h6 text-gray-300">Tahun Ajaran</th>
                             <th class="h6 text-gray-300">Maksimum</th>
                             <th class="h6 text-gray-300">Wali Kelas</th>
                             <th class="h6 text-gray-300">Actions</th>
@@ -49,6 +50,9 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->nama }}</span>
+                                </td>
+                                <td>
+                                    <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->tahunajaran->nama }}</span>
                                 </td>
                                 <td>
                                     <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->maksimum }}</span>

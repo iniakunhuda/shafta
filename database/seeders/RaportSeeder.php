@@ -55,6 +55,7 @@ class RaportSeeder extends Seeder
                 'nama' => $k,
                 'maksimum' => 30,
                 'wali_kelas_nama' => 'Wali Kelas ' . $k,
+                'id_tahunajaran' => $tahunAjaran->id,
             ]);
         }
 

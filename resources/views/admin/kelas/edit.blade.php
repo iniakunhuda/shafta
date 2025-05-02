@@ -66,6 +66,17 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <label for="id_tahunajaran" class="h5 mb-8 fw-semibold font-heading">Tahun Ajaran <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <select class="form-control py-11 @error('id_tahunajaran') is-invalid @enderror" id="id_tahunajaran" name="id_tahunajaran" required>
+                                    @foreach ($tahunAjaran as $tahun)
+                                        <option value="{{ $tahun->id }}" {{ $kelas->id_tahunajaran == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="col-md-12 mt-4">
                             <div class="flex-align justify-content-end gap-8">
                                 <button type="submit" class="btn btn-main rounded-pill py-12 px-24">Simpan Perubahan</button>

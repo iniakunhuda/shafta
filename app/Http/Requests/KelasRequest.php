@@ -25,6 +25,7 @@ class KelasRequest extends FormRequest
             'nama' => 'required|string|max:255',
             'maksimum' => 'required|integer|min:1',
             'wali_kelas_nama' => 'required|string|max:255',
+            'id_tahunajaran' => 'required|exists:tahun_ajaran,id',
         ];
     }
 }

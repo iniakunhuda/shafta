@@ -6,18 +6,22 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Services\KelasService;
 use App\Http\Requests\KelasRequest;
+use App\Http\Services\TahunAjaranService;
+
 class KelasController extends Controller
 {
     protected $kelasService;
-
+    protected $tahunAjaranService;
     /**
      * Constructor
      *
      * @param KelasService $kelasService
+     * @param TahunAjaranService $tahunAjaranService
      */
-    public function __construct(KelasService $kelasService)
+    public function __construct(KelasService $kelasService, TahunAjaranService $tahunAjaranService)
     {
         $this->kelasService = $kelasService;
+        $this->tahunAjaranService = $tahunAjaranService;
     }
 
     /**
@@ -38,7 +42,8 @@ class KelasController extends Controller
      */
     public function create()
     {
-        return view('admin.kelas.create');
+        $tahunAjaran = $this->tahunAjaranService->getAll();
+        return view('admin.kelas.create', compact('tahunAjaran'));
     }
 
     /**
@@ -63,7 +68,8 @@ class KelasController extends Controller
     public function edit($id)
     {
         $kelas = $this->kelasService->getById($id);
-        return view('admin.kelas.edit', compact('kelas'));
+        $tahunAjaran = $this->tahunAjaranService->getAll();
+        return view('admin.kelas.edit', compact('kelas', 'tahunAjaran'));
     }
 
     /**
