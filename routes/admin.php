@@ -13,7 +13,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // User Management
-    Route::resource('user/siswa', UserSiswaController::class);
+    Route::resource('user/siswa', UserSiswaController::class)->names('admin.user_siswa');
+    Route::put('user/siswa/{user}/toggle-status', [UserSiswaController::class, 'toggleStatus'])->name('admin.user_siswa.toggle-status');
     Route::resource('user/admin', UserAdminController::class)->names('admin.user_admin');
     Route::put('user/admin/{user}/toggle-status', [UserAdminController::class, 'toggleStatus'])->name('admin.user_admin.toggle-status');
 
