@@ -14,7 +14,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
 
     // User Management
     Route::resource('user/siswa', UserSiswaController::class);
-    Route::resource('user/admin', UserAdminController::class);
+    Route::resource('user/admin', UserAdminController::class)->names('admin.user_admin');
+    Route::put('user/admin/{user}/toggle-status', [UserAdminController::class, 'toggleStatus'])->name('admin.user_admin.toggle-status');
 
     // System Settings
     Route::get('/settings', 'App\Http\Controllers\Superadmin\SettingController@index')->name('admin.settings');

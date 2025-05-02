@@ -70,13 +70,13 @@
                         <span class="text">Kalender</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
-                    <span class="text-gray-300 text-sm px-20 pt-20 fw-semibold border-top border-gray-100 d-block text-uppercase">Pengaturan</span>
-                </li>
 
                 @if(Auth::user()->isSuperAdmin())
                 <li class="sidebar-menu__item">
-                    <a href="sekolah.php" class="sidebar-menu__link">
+                    <span class="text-gray-300 text-sm px-20 pt-20 fw-semibold border-top border-gray-100 d-block text-uppercase">Pengaturan</span>
+                </li>
+                <li class="sidebar-menu__item {{ request()->is('superadmin/user/admin*') ? 'activePage' : '' }}">
+                    <a href="{{ route('admin.user_admin.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-user-check"></i></span>
                         <span class="text">Akun Admin</span>
                     </a>
@@ -87,14 +87,14 @@
                         <span class="text">Akun Siswa</span>
                     </a>
                 </li>
-                @endif
-
                 <li class="sidebar-menu__item">
                     <a href="setting.php" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-gear"></i></span>
                         <span class="text">Pengaturan</span>
                     </a>
                 </li>
+                @endif
+
                 @endif
 
             </ul>
