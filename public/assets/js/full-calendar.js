@@ -28,11 +28,11 @@ $(document).ready(function() {
       -----------------------------------------------------------------*/		
       var calendar =  $('#calendar').fullCalendar({
           header: {
-              left: 'title',
-              center: 'agendaDay,agendaWeek,month',
+            //   left: 'title',
+              center: 'title',
               right: 'prev,next today'
           },
-          editable: true,
+        //   editable: true,
           firstDay: 1, //  1(Monday) this can be changed to 0(Sunday) for the USA system
           selectable: true,
           defaultView: 'month',			
@@ -50,12 +50,11 @@ $(document).ready(function() {
           },
           allDaySlot: false,//cambie a true
           selectHelper: true,
-          dayClick: function (date, allDay, jsEvent, view) {
-              if (allDay) {
-                  // Clicked on the day number 
-                  calendar.fullCalendar('changeView', 'agendaDay'/* or 'basicDay' */)
-                      .fullCalendar('gotoDate', date.getFullYear(), date.getMonth(), date.getDate());
-              }
+          dayClick: function(date, jsEvent, view) {
+              
+              
+              // Trigger a custom event that the parent page can handle
+              $(document).trigger('calendarDayClick', [date, jsEvent, view]);
           },
           select: function (startDate, endDate, allDay) {
               if (!allDay) {
@@ -118,52 +117,17 @@ $(document).ready(function() {
               
           },
           
-          events: [
-              {
-                  title: 'All Day Event',
-                  start: new Date(y, m, 1)
-              },
-              {
-                  id: 999,
-                  title: 'Repeating Event',
-                  start: new Date(y, m, d-3, 16, 0),
-                  allDay: false,
-                  className: 'info'
-              },
-              {
-                  id: 999,
-                  title: 'Repeating Event',
-                  start: new Date(y, m, d+4, 16, 0),
-                  allDay: false,
-                  className: 'info'
-              },
-              {
-                  title: 'Meeting',
-                  start: new Date(y, m, d, 10, 30),
-                  allDay: false,
-                  className: 'important'
-              },
-              {
-                  title: 'Lunch',
-                  start: new Date(y, m, d, 12, 0),
-                  end: new Date(y, m, d, 14, 0),
-                  allDay: false,
-                  className: 'important'
-              },
-              {
-                  title: 'Birthday Party',
-                  start: new Date(y, m, d+1, 19, 0),
-                  end: new Date(y, m, d+1, 22, 30),
-                  allDay: false,
-              },
-              {
-                  title: 'Click for Google',
-                  start: new Date(y, m, 28),
-                  end: new Date(y, m, 29),
-                  url: 'http://google.com/',
-                  className: 'success'
+          events: {
+              url: "/api/kalender",
+              type: 'GET', 
+              error: function() {
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Gagal Mengambil Event',
+                      text: 'Terjadi kesalahan saat mengambil event dari server.'
+                  });
               }
-          ],			
+          },
       });
       
       
@@ -190,9 +154,9 @@ var defaults = {
   // display
   defaultView: 'month',
   aspectRatio: 1.35,
+  
   header: {
-      left: 'title',
-      center: '',
+      center: 'title',
       right: 'today prev,next'
   },
   weekends: true,
@@ -6001,8 +5965,6 @@ function compareDaySegments(a, b) {
 
 ;;
 
-//BUG: unselect needs to be triggered when events are dragged+dropped
-
 function SelectionManager() {
   var t = this;
   
@@ -7927,7 +7889,7 @@ function HorizontalPositionCache(getElement) {
 // function parseISO8601(s, ignoreTimezone) { // ignoreTimezone defaults to false
 //   // derived from http://delete.me.uk/2005/03/iso8601.html
 //   // TODO: for a know glitch/feature, read tests/issue_206_parseDate_dst.html
-//   var m = s.match(/^([0-9]{4})(-([0-9]{2})(-([0-9]{2})([T ]([0-9]{2}):([0-9]{2})(:([0-9]{2})(\.([0-9]+))?)?(Z|(([-+])([0-9]{2})(:?([0-9]{2}))?))?)?)?)?$/);
+//   var m = s.match(/^([0-9]{4})(-([0-9]{2})(-([0-9]{2})([T ]([0-9]{2}):([0-9]{2})(:([0-9]{2})(\.([0-9]+))?)?(Z|(([-+])([0-9]{2})(:?([0-9]{2}))?))?)?)?$/);
 //   if (!m) {
 //       return null;
 //   }
@@ -9525,18 +9487,8 @@ function HorizontalPositionCache(getElement) {
 
 
 //   function buildDayTableHTML() {
-//       var html =
-//           "<table style='width:100%' class='fc-agenda-days fc-border-separate' cellspacing='0'>" +
-//           buildDayTableHeadHTML() +
-//           buildDayTableBodyHTML() +
-//           "</table>";
-
-//       return html;
-//   }
-
-
-//   function buildDayTableHeadHTML() {
 //       var headerClass = tm + "-widget-header";
+//       var contentClass = tm + "-widget-content";
 //       var date;
 //       var html = '';
 //       var weekText;
