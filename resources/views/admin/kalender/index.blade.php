@@ -175,47 +175,6 @@
                     console.error('Error showing modal:', error);
                 }
             });
-            
-            // Initialize calendar
-            try {
-                var calendar = $('#calendar').fullCalendar({
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: ''
-                    },
-                    firstDay: 1,
-                    selectable: true,
-                    defaultView: 'month',
-                    axisFormat: 'h:mm',
-                    columnFormat: {
-                        month: 'ddd',
-                        week: 'ddd d',
-                        day: 'dddd M/d',
-                        agendaDay: 'dddd d'
-                    },
-                    titleFormat: {
-                        month: 'MMMM yyyy',
-                        week: "MMMM yyyy",
-                        day: 'MMMM yyyy'
-                    },
-                    allDaySlot: false,
-                    selectHelper: true,
-                    dayClick: function(date, jsEvent, view) {
-                        // Trigger the calendarDayClick event
-                        $(document).trigger('calendarDayClick', [date]);
-                    },
-                    events: {
-                        url: "/api/kalender",
-                        type: 'GET',
-                        error: function() {
-                            alert('Terjadi kesalahan saat mengambil data event!');
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error('Error initializing calendar:', error);
-            }
 
             // Handle form submission
             $('#exampleModal form').on('submit', function(e) {
@@ -241,7 +200,7 @@
                 };
                 
                 console.log('Adding event:', eventData);
-                calendar.fullCalendar('renderEvent', eventData, true);
+                $('#calendar').fullCalendar('renderEvent', eventData, true);
                 
                 // Close the modal
                 $('#exampleModal').modal('hide');
