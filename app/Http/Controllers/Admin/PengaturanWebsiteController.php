@@ -16,10 +16,8 @@ class PengaturanWebsiteController extends Controller
 
     public function index()
     {
-        return view('admin.pengaturan_website.index', [
-            'title' => 'Pengaturan Website',
-            'pengaturan' => $this->pengaturanService->getPengaturanWebsite(),
-        ]);
+        $pengaturan = $this->pengaturanService->getPengaturanWebsite();
+        return view('admin.settings.index', compact('pengaturan'));
     }
     public function update(Request $request)
     {

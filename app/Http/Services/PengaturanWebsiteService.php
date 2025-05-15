@@ -2,6 +2,7 @@
 namespace App\Http\Services;
 
 use App\Models\Pengaturan;
+use Illuminate\Http\Request;
 class PengaturanWebsiteService
 {
     /**
@@ -25,13 +26,17 @@ class PengaturanWebsiteService
      * @param array $request
      * @return void
      */
-    public function updatePengaturanWebsite($request)
+    public function updatePengaturanWebsite(Request $request)
     {
-        foreach ($request as $key => $value) {
+        $data = $request->except('_token', '_method');
+        foreach ($data as $key => $value) {
             $pengaturan = Pengaturan::where('key', $key)->first();
-            $pengaturan->value = $value;
-            $pengaturan->save();
+            if ($pengaturan) {
+                $pengaturan->value = $value;
+                $pengaturan->save();
+            }
         }
+        return true;
     }
 
 
