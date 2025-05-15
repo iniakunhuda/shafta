@@ -102,46 +102,18 @@
                             <h4 class="mb-0">Semester</h4>
                             <!-- <a href="assignment.html" class="text-13 fw-medium text-main-600 hover-text-decoration-underline">See All</a> -->
                         </div>
+                        @foreach ($semester as $item)
                         <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
                             <div class="flex-align flex-wrap gap-8">
                                 <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
                                 <div>
-                                    <h6 class="mb-0">Semester 1</h6>
-                                    <span class="text-13 text-gray-400">2023/2024</span>
+                                    <h6 class="mb-0">{{ $item->semester }}</h6>
+                                    <span class="text-13 text-gray-400">{{ $item->nama }} </span>
                                 </div>
                             </div>
                             <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
                         </div>
-                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                            <div class="flex-align flex-wrap gap-8">
-                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                                <div>
-                                    <h6 class="mb-0">Semester 2</h6>
-                                    <span class="text-13 text-gray-400">2023/2024</span>
-                                </div>
-                            </div>
-                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                        </div>
-                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                            <div class="flex-align flex-wrap gap-8">
-                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                                <div>
-                                    <h6 class="mb-0">Semester 1</h6>
-                                    <span class="text-13 text-gray-400">2024/2025</span>
-                                </div>
-                            </div>
-                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                        </div>
-                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                            <div class="flex-align flex-wrap gap-8">
-                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                                <div>
-                                    <h6 class="mb-0">Semester 2</h6>
-                                    <span class="text-13 text-gray-400">2024/2025</span>
-                                </div>
-                            </div>
-                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
                 <!-- Assignment End -->

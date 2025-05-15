@@ -25,9 +25,7 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('kalender', KalenderController::class);
     Route::resource('tahun_ajaran', TahunAjaranController::class)->names('admin.tahun_ajaran');
