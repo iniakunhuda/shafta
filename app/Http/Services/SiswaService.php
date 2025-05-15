@@ -66,7 +66,7 @@ class SiswaService
         $siswa = Siswa::find($id);
         $status = match($siswa->status) {
             'active' => 'block',
-            'block' => 'pending',
+            'block' => 'active',
             'pending' => 'active',
             default => 'pending'
         };
