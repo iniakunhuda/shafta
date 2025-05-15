@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateKalenderRequest;
+use App\Http\Requests\UpdateKalenderRequest;
 use App\Models\Kalender;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class KalenderController extends Controller
 {
     /**
@@ -26,8 +28,8 @@ class KalenderController extends Controller
                 'end' => date('Y-m-d', strtotime($item->end)),
                 'className' => "info",
                 'description' => $item->description,
-                'url' => $item->url,
                 'user_id' => $item->user_id,
+                'type' => $item->type,
             ];
         });
         return response()->json($kalender);
@@ -44,9 +46,16 @@ class KalenderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateKalenderRequest $request)
     {
-        //
+        try {
+            $validated = $request->validated();
+            $validated['className'] = $validated['type'] == 'ujian' ? 'danger' : 'info';
+            $kalender = Kalender::create($validated);
+            return response()->json($kalender);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -68,9 +77,20 @@ class KalenderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateKalenderRequest $request, string $id)
     {
-        //
+        try {
+            $validated = $request->validated();
+            $kalender = Kalender::find($id);
+            if ($kalender->user_id != $validated['user_id']) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+            $validated['className'] = $validated['type'] == 'ujian' ? 'danger' : 'info';
+            $kalender->update($validated);
+            return response()->json($kalender);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**

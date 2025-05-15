@@ -762,12 +762,11 @@ class RaportSeeder extends Seeder
           // Create Kalender 
           Kalender::create([
             'title' => 'Ujian Akhir Semester',
-            'description' => 'Ujian Akhir Semester untuk ' . $siswa->nama,
+            'description' => 'Ujian Akhir Semester untuk ' . $tahunAjaran->nama,
             'start' => now(),
             'end' => now(),
-            'url' => null,
             'className' => 'success',
-            // who created the event
+            'type' => 'ujian',
             'user_id' => $adminUser->id,
         ]);
     }

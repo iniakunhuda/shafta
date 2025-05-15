@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->date('start');
             $table->date('end');
-            $table->string('url')->nullable();
-            $table->string('className');
+            $table->string('type')->nullable();
+            $table->string('className')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
         });
