@@ -22,7 +22,7 @@
                             <div class="grettings-box__content py-xl-4">
                                 <h2 class="text-white mb-0">Hello, Admin! </h2>
                                 <p class="text-15 fw-light mt-4 text-white">Selamat datang di Shafta E-Raport</p>
-                                <p class="text-lg fw-light mt-24 text-white">Semester 1 &mdash; 2025/2026</p>
+                                <p class="text-lg fw-light mt-24 text-white">Semester {{ $semesterActive->semester }} &mdash; {{ $semesterActive->nama }}</p>
                             </div>
                         </div>
                         <!-- <div class="col-sm-5 d-sm-block d-none">

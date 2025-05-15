@@ -17,7 +17,8 @@ class DashboardController extends Controller
     {
         // Get All Semester
         $semester = TahunAjaran::all();
-        return view('admin.dashboard', compact('semester'));
+        $semesterActive = TahunAjaran::where('is_active', 1)->first();
+        return view('admin.dashboard', compact('semester', 'semesterActive'));
     }
 
 }
