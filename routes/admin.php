@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KalenderController;
+use App\Http\Controllers\Admin\PengaturanWebsiteController;
 use App\Http\Controllers\Admin\TahunAjaranController;
 use App\Http\Controllers\Admin\KelasController;
 use Illuminate\Support\Facades\Route;
@@ -20,8 +21,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
     Route::put('user/admin/{user}/toggle-status', [UserAdminController::class, 'toggleStatus'])->name('admin.user_admin.toggle-status');
 
     // System Settings
-    Route::get('/settings', 'App\Http\Controllers\Superadmin\SettingController@index')->name('admin.settings');
-    Route::post('/settings', 'App\Http\Controllers\Superadmin\SettingController@update')->name('admin.settings.update');
+    Route::get('/settings', [PengaturanWebsiteController::class, 'index'])->name('admin.settings');
+    Route::put('/settings', [PengaturanWebsiteController::class, 'update'])->name('admin.settings.update');
 });
 
 

@@ -88,7 +88,7 @@
                     </a>
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="setting.php" class="sidebar-menu__link">
+                    <a href="{{ route('admin.settings') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-gear"></i></span>
                         <span class="text">Pengaturan</span>
                     </a>
