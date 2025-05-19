@@ -11,6 +11,19 @@
         Kalender
     </x-slot>
 
+    <x-slot name="styles">
+        <style>
+            .fc-day {
+                background-color: #fff;
+                border: 1px solid #e0e0e0;
+            }
+            .fc-event.info {
+                background-color: hsl(var(--main)) !important;
+                border-color: hsl(var(--main)) !important;
+            }
+        </style>
+    </x-slot>
+
     <main>
         <div class="card mt-24 bg-transparent">
             <div class="card-body p-0">
@@ -36,7 +49,7 @@
                     </div>
                     <div class="modal-body p-24">
                         <form id="addEventForm">
-                            <div class="row">   
+                            <div class="row">
                                 <div class="col-12 mb-20">
                                     <label class="form-label fw-semibold text-primary-light text-sm mb-8">Judul Kegiatan:</label>
                                     <input type="text" class="form-control radius-8" placeholder="Masukkan Judul Kegiatan">
@@ -93,7 +106,7 @@
                     </div>
                     <div class="modal-body p-24">
                         <form id="editEventForm">
-                            <div class="row"> 
+                            <div class="row">
                                 {{-- Input Hidden Id --}}
                                 <input type="hidden" id="editEventId" name="id">
                                 {{-- Input Hidden User Id --}}
@@ -143,172 +156,214 @@
         </div>
     </main>
 
-    @push('scripts')
+    <x-slot name="scripts">
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-    {{-- Import moment.js --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-    <script>
-        // Wait for all scripts to be loaded
-        document.addEventListener('DOMContentLoaded', function() {            
-            // Check if FullCalendar is available
-            if (typeof $.fullCalendar === 'undefined') {
-                console.error('FullCalendar is not loaded!');
-                return;
-            }
-            
-            // Check if jQuery is available
-            if (typeof $ === 'undefined') {
-                console.error('jQuery is not loaded!');
-                return;
-            }
-            
-            // Check if Bootstrap is available
-            if (typeof bootstrap === 'undefined') {
-                console.error('Bootstrap is not loaded!');
-                return;
-            }
-            
-            // Initialize calendar
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
             try {
-                var calendar = $('#calendar').fullCalendar({
-                    header: {
+                const calendarEl = document.getElementById('calendar');
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    headerToolbar: {
                         left: '',
                         center: 'title',
                         right: 'prev,next today'
                     },
                     firstDay: 1,
-                    selectable: true,
-                    defaultView: 'month',
-                    axisFormat: 'h:mm',
-                    columnFormat: {
-                        month: 'ddd',
-                        week: 'ddd d',
-                        day: 'dddd M/d',
-                        agendaDay: 'dddd d'
-                    },
-                    titleFormat: {
-                        month: 'MMMM yyyy',
-                        week: "MMMM yyyy",
-                        day: 'MMMM yyyy'
-                    },
-                    allDaySlot: false,
-                    selectHelper: true,
-                    eventClick: function(event, jsEvent, view) {
-                        
-                        // Fill the edit modal with event data
-                        $('#editEventId').val(event.id);
-                        $('#editEventTitle').val(event.title);
-                        $('#editStartDate').val(moment(event.start).format('YYYY-MM-DD'));
-                        $('#editEndDate').val(event.end ? moment(event.end).format('YYYY-MM-DD') : moment(event.start).format('YYYY-MM-DD'));
-                        $('#editDesc').val(event.description);
-                        // selected the type
-                        $('#editEventType').val(event.type).prop('selected', true);
-                        
-                        // Store the event ID for updating
-                        $('#editEventForm').data('event-id', event.id);
-                        
-                        // Show the edit modal
-                        $('#editEventModal').modal('show');
-                    },
+                    selectable: true,  // This is already set
+                    initialView: 'dayGridMonth',
+                    dayMaxEvents: true,
+                    allDaySlot: true,
+                    selectMirror: true,
                     events: {
-                        url: "/api/kalender",
-                        type: 'GET',
-                        error: function() {
+                        url: '/api/kalender',
+                        method: 'GET',
+                        failure: function() {
                             alert('Terjadi kesalahan saat mengambil data event!');
+                        },
+                        extraParams: {
+                            _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                    },
+                    // Add this new select callback function
+                    select: function(info) {
+                        // Set the selected date in the form
+                        document.getElementById('startDate').value = moment(info.start).format('YYYY-MM-DD');
+                        document.getElementById('endDate').value = moment(info.end).subtract(1, 'days').format('YYYY-MM-DD');
+
+                        // Show the create modal
+                        const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                        modal.show();
+                    },
+                    eventClick: function(info) {
+                        const event = info.event;
+
+                        document.getElementById('editEventId').value = event.id;
+                        document.getElementById('editEventTitle').value = event.title;
+                        document.getElementById('editStartDate').value = moment(event.start).format('YYYY-MM-DD');
+
+                        let endDate = event.end;
+                        if (endDate) {
+                            // In FullCalendar 6, the end date is exclusive, so subtract 1 day to match your logic
+                            endDate = moment(endDate).subtract(1, 'days');
+                            document.getElementById('editEndDate').value = endDate.format('YYYY-MM-DD');
+                        } else {
+                            document.getElementById('editEndDate').value = moment(event.start).format('YYYY-MM-DD');
                         }
+
+                        document.getElementById('editDesc').value = event.extendedProps.description;
+
+                        // Set the event type in the select dropdown
+                        const selectElement = document.getElementById('editEventType');
+                        for(let i = 0; i < selectElement.options.length; i++) {
+                            if(selectElement.options[i].value === event.extendedProps.type) {
+                                selectElement.selectedIndex = i;
+                                break;
+                            }
+                        }
+
+                        // Store event ID for the form submission
+                        document.getElementById('editEventForm').dataset.eventId = event.id;
+
+                        // Show modal
+                        const editModal = new bootstrap.Modal(document.getElementById('editEventModal'));
+                        editModal.show();
                     }
                 });
+
+                calendar.render();
+
+                // Store calendar reference for later use
+                window.calendarInstance = calendar;
+
+                // Add Event Form Handler
+                document.getElementById('addEventForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const title = this.querySelector('input[type="text"]').value;
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    const description = document.getElementById('desc').value;
+                    const type = document.getElementById('eventType').value;
+
+                    if (!title) {
+                        alert('Judul event harus diisi');
+                        return;
+                    }
+
+                    const eventData = {
+                        title: title,
+                        start: startDate,
+                        end: moment(endDate).add(1, 'days').format('YYYY-MM-DD'),
+                        description: description,
+                        type: type,
+                        allDay: true,
+                        user_id: {{ auth()->user()->id }}
+                    };
+
+                    // If using AJAX
+                    fetch('{{ route('api.kalender.store') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify(eventData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Add event to calendar
+                        calendar.addEvent({
+                            id: data.id || Date.now(), // Use returned ID or generate temporary one
+                            title: data.title,
+                            start: data.start,
+                            end: data.end,
+                            allDay: true,
+                            extendedProps: {
+                                description: data.description,
+                                type: data.type
+                            }
+                        });
+
+                        // Hide modal and reset form
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                        modal.hide();
+                        document.getElementById('addEventForm').reset();
+
+                        alert(`Kegiatan "${title}" berhasil ditambahkan.`);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat menambahkan kegiatan!');
+                    });
+                });
+
+                // Edit Event Form Handler
+                document.getElementById('editEventForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const eventId = this.dataset.eventId;
+                    const title = document.getElementById('editEventTitle').value;
+                    const startDate = document.getElementById('editStartDate').value;
+                    const endDate = document.getElementById('editEndDate').value;
+                    const description = document.getElementById('editDesc').value;
+                    const type = document.getElementById('editEventType').value;
+
+                    const eventData = {
+                        id: document.getElementById('editEventId').value,
+                        title: title,
+                        start: startDate,
+                        end: moment(endDate).add(1, 'days').format('YYYY-MM-DD'),
+                        description: description,
+                        type: type,
+                        user_id: {{ auth()->user()->id }}
+                    };
+
+                    // If using AJAX
+                    fetch(`/api/kalender/${eventId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify(eventData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Find and update the event in calendar
+                        const event = calendar.getEventById(eventId);
+                        if (event) {
+                            event.setProp('title', title);
+                            event.setStart(startDate);
+                            event.setEnd(moment(endDate).add(1, 'days').format('YYYY-MM-DD'));
+                            event.setExtendedProp('description', description);
+                            event.setExtendedProp('type', type);
+                        }
+
+                        // Hide modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('editEventModal'));
+                        modal.hide();
+
+                        alert(`Kegiatan "${title}" berhasil diperbarui.`);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat memperbarui kegiatan!');
+                    });
+                });
+
+                // Add event button click handler
+                document.querySelector('.add-event').addEventListener('click', function() {
+                    const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                    modal.show();
+                });
+
             } catch (error) {
                 console.error('Error initializing calendar:', error);
             }
-
-            // Handle form submission for adding new event
-            $('#exampleModal form').on('submit', function(e) {
-                e.preventDefault();
-                console.log('Form submitted');
-                
-                const title = $(this).find('input[type="text"]').val();
-                const startDate = $('#startDate').val();
-                const endDate = $('#endDate').val();
-                const description = $('#desc').val();
-                const type = $('#eventType').val();
-                console.log(type);
-                if (!title) {
-                    alert('Judul event harus diisi');
-                    return;
-                }
-                
-                const eventData = {
-                    title: title,
-                    start: startDate,
-                    end: endDate,
-                    description: description,
-                    type: type,
-                    allDay: true,
-                    user_id: {{ auth()->user()->id }}
-                };
-                
-                // send data to the server
-                $.ajax({
-                    url: '{{ route('api.kalender.store') }}',
-                    type: 'POST',
-                    data: eventData,
-                }).then(response => {
-                    // Add the new event to the calendar
-                    calendar.fullCalendar('renderEvent', response, true);
-                    // Close the modal
-                    $('#exampleModal').modal('hide');
-                    // Reset the form
-                    this.reset();
-                    // Show success message
-                    alert(`Kegiatan "${title}" berhasil ditambahkan.`);
-                }).catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan saat menambahkan kegiatan!');
-                });
-            });
-
-            // Handle form submission for editing event
-            $('#editEventForm').on('submit', function(e) {
-                e.preventDefault();
-                
-                const eventId = $(this).data('event-id');
-                const eventData = {
-                    id: $('#editEventId').val(),
-                    title: $('#editEventTitle').val(),
-                    start: $('#editStartDate').val(),
-                    end: $('#editEndDate').val(),
-                    description: $('#editDesc').val(),
-                    type: $('#editEventType').val(),
-                    user_id: {{ auth()->user()->id }}
-                };
-
-                // Update event on the server
-                $.ajax({
-                    url: `/api/kalender/${eventId}`,
-                    type: 'PUT',
-                    data: eventData,
-                }).then(response => {
-                    // Update the event in the calendar
-                    calendar.fullCalendar('updateEvent', response);
-                    // Close the modal
-                    $('#editEventModal').modal('hide');
-                    // Show success message
-                    alert(`Kegiatan berhasil diperbarui.`);
-                }).catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan saat memperbarui kegiatan!');
-                });
-            });
-
-            // Add click handler to test modal directly
-            $('.add-event').on('click', function() {
-                console.log('Add event button clicked');
-                $('#exampleModal').modal('show');
-            });
         });
-    </script>
-    @endpush
+        </script>
+    </x-slot>
 
 </x-app-layout>
