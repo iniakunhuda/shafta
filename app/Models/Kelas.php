@@ -25,6 +25,7 @@ class Kelas extends Model
         'nama',
         'maksimum',
         'wali_kelas_nama',
+        'id_tahunajaran',
     ];
 
     /**
@@ -50,5 +51,10 @@ class Kelas extends Model
     public function raportHafalans()
     {
         return $this->hasMany(RaportHafalan::class, 'id_kelas');
+    }
+
+    public function tahunajaran()
+    {
+        return $this->belongsTo(TahunAjaran::class, 'id_tahunajaran');
     }
 }
