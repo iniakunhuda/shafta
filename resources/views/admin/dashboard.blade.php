@@ -240,10 +240,10 @@
             }
 
             // Call the function for each chart with the desired ID and color
-            createChart('complete-course', '#2FB2AB');
-            createChart('earned-certificate', '#27CFA7');
-            createChart('course-progress', '#6142FF');
-            createChart('community-support', '#FA902F');
+            // createChart('complete-course', '#2FB2AB');
+            // createChart('earned-certificate', '#27CFA7');
+            // createChart('course-progress', '#6142FF');
+            // createChart('community-support', '#FA902F');
 
 
             // =========================== Double Line Chart Start ===============================
@@ -415,37 +415,37 @@
                 labels: ['Completed', 'In Progress', 'Not Started'],
             };
 
-            var chart = new ApexCharts(document.querySelector("#radialMultipleBar"), options);
-            chart.render();
+            // var chart = new ApexCharts(document.querySelector("#radialMultipleBar"), options);
+            // chart.render();
             // ================================= Multiple Radial Bar Chart End =============================
 
             // ========================== Export Js Start ==============================
-            document.getElementById('exportOptions').addEventListener('change', function() {
-                const format = this.value;
-                const table = document.getElementById('studentTable');
-                let data = [];
-                const headers = [];
+            // document.getElementById('exportOptions').addEventListener('change', function() {
+            //     const format = this.value;
+            //     const table = document.getElementById('studentTable');
+            //     let data = [];
+            //     const headers = [];
 
-                // Get the table headers
-                table.querySelectorAll('thead th').forEach(th => {
-                    headers.push(th.innerText.trim());
-                });
+            //     // Get the table headers
+            //     table.querySelectorAll('thead th').forEach(th => {
+            //         headers.push(th.innerText.trim());
+            //     });
 
-                // Get the table rows
-                table.querySelectorAll('tbody tr').forEach(tr => {
-                    const row = {};
-                    tr.querySelectorAll('td').forEach((td, index) => {
-                        row[headers[index]] = td.innerText.trim();
-                    });
-                    data.push(row);
-                });
+            //     // Get the table rows
+            //     table.querySelectorAll('tbody tr').forEach(tr => {
+            //         const row = {};
+            //         tr.querySelectorAll('td').forEach((td, index) => {
+            //             row[headers[index]] = td.innerText.trim();
+            //         });
+            //         data.push(row);
+            //     });
 
-                if (format === 'csv') {
-                    downloadCSV(data);
-                } else if (format === 'json') {
-                    downloadJSON(data);
-                }
-            });
+            //     if (format === 'csv') {
+            //         downloadCSV(data);
+            //     } else if (format === 'json') {
+            //         downloadJSON(data);
+            //     }
+            // });
 
             function downloadCSV(data) {
                 const csv = data.map(row => Object.values(row).join(',')).join('\n');
