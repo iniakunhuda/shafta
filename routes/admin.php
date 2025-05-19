@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KalenderController;
+use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\PengaturanWebsiteController;
 use App\Http\Controllers\Admin\TahunAjaranController;
 use App\Http\Controllers\Admin\KelasController;
@@ -43,5 +44,8 @@ Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->group(fun
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
+    Route::resource('siswa', SiswaController::class)->names('admin.siswa');
+    Route::put('siswa/{id}/toggle-active',[SiswaController::class, 'toggleActive'])
+        ->name('admin.siswa.toggle-active');
     Route::resource('kelas', KelasController::class)->names('admin.kelas');
 });

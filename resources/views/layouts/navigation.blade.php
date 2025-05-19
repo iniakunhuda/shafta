@@ -47,7 +47,7 @@
                     </a>
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="siswa.php" class="sidebar-menu__link">
+                    <a href="{{ route('admin.siswa.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-users-three"></i></span>
                         <span class="text">Siswa</span>
                     </a>
