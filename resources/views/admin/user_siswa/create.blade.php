@@ -3,19 +3,19 @@
         <ul class="flex-align gap-4">
             <li><a href="{{ route('dashboard') }}" class="text-gray-200 fw-normal text-15 hover-text-main-600">Home</a></li>
             <li> <span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span> </li>
-            <li><a href="{{ route('admin.user_admin.index') }}" class="text-gray-200 fw-normal text-15 hover-text-main-600">{{ __('Akun Admin') }}</a></li>
+            <li><a href="{{ route('admin.user_siswa.index') }}" class="text-gray-200 fw-normal text-15 hover-text-main-600">{{ __('Akun Siswa') }}</a></li>
             <li> <span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span> </li>
             <li><span class="text-main-600 fw-normal text-15">{{ __('Tambah Baru') }}</span></li>
         </ul>
     </x-slot>
 
     <x-slot name="headerTitle">
-        Tambah Admin
+        Tambah Akun Siswa
     </x-slot>
 
     <main>
         <div class="d-flex justify-content-between align-items-center mb-20">
-            <a href="{{ route('admin.user_admin.index') }}" class="btn btn-main text-white rounded-pill px-24 py-12">
+            <a href="{{ route('admin.user_siswa.index') }}" class="btn btn-main text-white rounded-pill px-24 py-12">
                 <i class="ph ph-arrow-left pr-3"></i>
                 {{ __('Kembali') }}
             </a>
@@ -23,10 +23,10 @@
 
         <div class="card">
             <div class="card-header border-bottom border-gray-100 flex-align gap-8">
-                <h5 class="mb-0">Data Admin</h5>
+                <h5 class="mb-0">Data Siswa</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.user_admin.store') }}" method="POST">
+                <form action="{{ route('admin.user_siswa.store') }}" method="POST">
                     @csrf
                     <div class="row g-20">
                         <div class="col-md-6">
@@ -100,6 +100,8 @@
                             </div>
                         </div>
 
+                        {{-- Input Hidden --}}
+                        <input type="hidden" name="role" value="siswa">
                         <div class="col-md-12 mt-4">
                             <div class="flex-align justify-content-end gap-8">
                                 <a href="{{ route('admin.user_admin.index') }}" class="btn btn-outline-main rounded-pill py-12 px-24">Batal</a>

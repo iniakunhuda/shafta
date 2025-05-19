@@ -81,8 +81,8 @@
                         <span class="text">Akun Admin</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
-                    <a href="sekolah.php" class="sidebar-menu__link">
+                <li class="sidebar-menu__item {{ request()->is('superadmin/user/siswa*') ? 'activePage' : '' }}">
+                    <a href="{{ route('admin.user_siswa.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-user"></i></span>
                         <span class="text">Akun Siswa</span>
                     </a>
