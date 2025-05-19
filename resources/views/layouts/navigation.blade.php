@@ -41,7 +41,7 @@
                     </a>
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="siswa.php" class="sidebar-menu__link">
+                    <a href="{{ route('admin.kelas.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-door-open"></i></span>
                         <span class="text">Kelas</span>
                     </a>
@@ -65,36 +65,36 @@
                     </a>
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="kalender.php" class="sidebar-menu__link">
+                    <a href="{{ route('admin.kalender.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-calendar-dots"></i></span>
                         <span class="text">Kalender</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
-                    <span class="text-gray-300 text-sm px-20 pt-20 fw-semibold border-top border-gray-100 d-block text-uppercase">Pengaturan</span>
-                </li>
 
                 @if(Auth::user()->isSuperAdmin())
                 <li class="sidebar-menu__item">
-                    <a href="sekolah.php" class="sidebar-menu__link">
+                    <span class="text-gray-300 text-sm px-20 pt-20 fw-semibold border-top border-gray-100 d-block text-uppercase">Pengaturan</span>
+                </li>
+                <li class="sidebar-menu__item {{ request()->is('superadmin/user/admin*') ? 'activePage' : '' }}">
+                    <a href="{{ route('admin.user_admin.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-user-check"></i></span>
                         <span class="text">Akun Admin</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
-                    <a href="sekolah.php" class="sidebar-menu__link">
+                <li class="sidebar-menu__item {{ request()->is('superadmin/user/siswa*') ? 'activePage' : '' }}">
+                    <a href="{{ route('admin.user_siswa.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-user"></i></span>
                         <span class="text">Akun Siswa</span>
                     </a>
                 </li>
-                @endif
-
                 <li class="sidebar-menu__item">
-                    <a href="setting.php" class="sidebar-menu__link">
+                    <a href="{{ route('admin.settings') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-gear"></i></span>
                         <span class="text">Pengaturan</span>
                     </a>
                 </li>
+                @endif
+
                 @endif
 
             </ul>
