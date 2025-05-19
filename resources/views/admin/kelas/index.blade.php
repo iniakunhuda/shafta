@@ -52,7 +52,7 @@
                                     <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->nama }}</span>
                                 </td>
                                 <td>
-                                    <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->tahunajaran->nama }}</span>
+                                    <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->tahunajaran->nama ?? '' }}</span>
                                 </td>
                                 <td>
                                     <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->maksimum }}</span>
