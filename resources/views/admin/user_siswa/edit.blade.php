@@ -101,7 +101,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         {{-- Input Hidden --}}
                         <input type="hidden" name="role" value="siswa">
 
@@ -116,5 +116,54 @@
             </div>
         </div>
     </main>
+
+    <x-slot name="scripts">
+        <script>
+            $(document).ready(function() {
+                // Function to toggle status message field visibility
+                function toggleStatusMessageField() {
+                    var selectedStatus = $('#status').val();
+                    var statusMessageField = $('#status_message').closest('.col-md-6');
+
+                    if (selectedStatus === 'block') {
+                        statusMessageField.show();
+                    } else {
+                        statusMessageField.hide();
+                        // Only clear the value when hiding if we're not on the edit page
+                        // or if the field was manually changed previously
+                        if (!window.isEditPage || window.statusMessageEdited) {
+                            $('#status_message').val('');
+                        }
+                    }
+                }
+
+                // Check if we're on the edit page by looking for the PUT method
+                window.isEditPage = $('input[name="_method"][value="PUT"]').length > 0;
+
+                // Track if status message has been manually edited
+                window.statusMessageEdited = false;
+                $('#status_message').on('input', function() {
+                    window.statusMessageEdited = true;
+                });
+
+                // Store original status and message for edit page
+                var originalStatus = $('#status').val();
+                var originalMessage = $('#status_message').val();
+
+                // Run on page load to set initial state
+                toggleStatusMessageField();
+
+                // Add event listener for status dropdown changes
+                $('#status').on('change', function() {
+                    // If switching back to original status on edit page, restore original message
+                    if (window.isEditPage && $(this).val() === originalStatus && !window.statusMessageEdited) {
+                        $('#status_message').val(originalMessage);
+                    }
+
+                    toggleStatusMessageField();
+                });
+            });
+        </script>
+    </x-slot>
 
 </x-app-layout>

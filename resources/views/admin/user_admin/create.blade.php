@@ -112,4 +112,28 @@
         </div>
     </main>
 
+    <x-slot name="scripts">
+        <script>
+            $(document).ready(function() {
+                function toggleStatusMessageField() {
+                    var selectedStatus = $('#status').val();
+                    var statusMessageField = $('#status_message').closest('.col-md-6');
+
+                    if (selectedStatus === 'block') {
+                        statusMessageField.show();
+                    } else {
+                        statusMessageField.hide();
+                        $('#status_message').val('');
+                    }
+                }
+
+                toggleStatusMessageField();
+
+                $('#status').on('change', function() {
+                    toggleStatusMessageField();
+                });
+            });
+        </script>
+    </x-slot>
+
 </x-app-layout>
