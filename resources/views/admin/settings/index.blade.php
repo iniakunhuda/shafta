@@ -29,17 +29,17 @@
                 <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    
+
                     <div class="row">
                         @foreach ($pengaturan as $key => $value)
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label for="{{ $key }}" class="form-label text-gray-600 fw-medium mb-2">
                                     {{ ucwords(str_replace('_', ' ', $key)) }}
                                 </label>
-                                <input type="text" 
-                                    class="form-control rounded-3 border-gray-200 @error($key) is-invalid @enderror" 
-                                    id="{{ $key }}" 
+                                <input type="text"
+                                    class="form-control rounded-3 border-gray-200 @error($key) is-invalid @enderror"
+                                    id="{{ $key }}"
                                     name="{{ $key }}"
                                     value="{{ old($key, $value) }}"
                                     placeholder="Masukkan {{ strtolower(str_replace('_', ' ', $key)) }}">
@@ -49,6 +49,7 @@
                                     </div>
                                 @enderror
                             </div>
+                            <br>
                         </div>
                         @endforeach
                     </div>
