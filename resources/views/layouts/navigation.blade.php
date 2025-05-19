@@ -65,7 +65,7 @@
                     </a>
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="kalender.php" class="sidebar-menu__link">
+                    <a href="{{ route('admin.kalender.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-calendar-dots"></i></span>
                         <span class="text">Kalender</span>
                     </a>

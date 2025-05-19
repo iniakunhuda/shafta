@@ -31,7 +31,7 @@ Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->group(fun
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
-    Route::resource('kalender', KalenderController::class);
+    Route::resource('kalender', KalenderController::class)->names('admin.kalender');
     Route::resource('tahun_ajaran', TahunAjaranController::class)->names('admin.tahun_ajaran');
     Route::put('tahun_ajaran/{id}/toggle-active',[TahunAjaranController::class, 'toggleActive'])
         ->name('admin.tahun_ajaran.toggle-active');

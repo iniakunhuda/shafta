@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Kalender;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -756,6 +757,18 @@ class RaportSeeder extends Seeder
                     'nilai_huruf' => '',
                 ]);
             }
+
+          
         }
+          // Create Kalender 
+          Kalender::create([
+            'title' => 'Ujian Akhir Semester',
+            'description' => 'Ujian Akhir Semester untuk ' . $tahunAjaran->nama,
+            'start' => now(),
+            'end' => now(),
+            'className' => 'success',
+            'type' => 'ujian',
+            'user_id' => $adminUser->id,
+        ]);
     }
 }
