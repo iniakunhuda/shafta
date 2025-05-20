@@ -6,15 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSiswaRequest;
 use App\Http\Requests\EditSiswaRequest;
 use App\Http\Services\SiswaService;
+use App\Http\Services\RaportService;
+use App\Http\Services\TahunAjaranService;
+use App\Http\Services\RaportNilaiService;
 use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
     protected $siswaService;
-
-    public function __construct(SiswaService $siswaService)
+    protected $raportService;
+    protected $tahunAjaranService;
+    protected $raportNilaiService;
+    public function __construct(SiswaService $siswaService, RaportService $raportService, TahunAjaranService $tahunAjaranService, RaportNilaiService $raportNilaiService)
     {
         $this->siswaService = $siswaService;
+        $this->raportService = $raportService;
+        $this->tahunAjaranService = $tahunAjaranService;
+        $this->raportNilaiService = $raportNilaiService;
     }
 
     public function index()
@@ -46,8 +54,7 @@ class SiswaController extends Controller
         $validated = $request->validated();
         $this->siswaService->updateSiswa($id, $validated);
         return redirect()->route('admin.siswa.index')->with('success', 'Siswa berhasil diubah');
-    }
-    
+    }    
     public function destroy($id)
     {
         $this->siswaService->deleteSiswa($id);
@@ -57,7 +64,12 @@ class SiswaController extends Controller
     public function show($id)
     {
         $siswa = $this->siswaService->getSiswaById($id);
-        return view('admin.siswa.show', compact('siswa'));
+        $tahunAjaran = $this->tahunAjaranService->getAll();
+        $tahunAjaranActive = $this->tahunAjaranService->getActive();
+        $raport = $this->raportService->getRaportBySiswaIdAndTahunAjaranId($id, $tahunAjaranActive->id);
+        $raportNilaiUmum = $this->raportNilaiService->getRaportNilaiByRaportId($raport->id, 'umum');
+        $raportNilaiShafta = $this->raportNilaiService->getRaportNilaiByRaportId($raport->id, 'shafta');
+        return view('admin.siswa.show', compact('siswa', 'raport', 'tahunAjaran', 'tahunAjaranActive', 'raportNilaiUmum', 'raportNilaiShafta'));
     }
 
     public function toggleActive($id)
