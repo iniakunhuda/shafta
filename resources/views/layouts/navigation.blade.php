@@ -40,31 +40,31 @@
                         <span class="text">Tahun Ajaran</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
+                <li class="sidebar-menu__item {{ request()->is('admin/kelas*') ? 'activePage' : '' }}"">
                     <a href="{{ route('admin.kelas.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-door-open"></i></span>
                         <span class="text">Kelas</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
+                <li class="sidebar-menu__item {{ request()->is('admin/siswa*') ? 'activePage' : '' }}"">
                     <a href="{{ route('admin.siswa.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-users-three"></i></span>
                         <span class="text">Siswa</span>
                     </a>
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="upload-raport.php" class="sidebar-menu__link">
+                    <a href="{{ route('dashboard') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-book-open-text"></i></span>
-                        <span class="text">Nilai Raport</span>
+                        <span class="text">Nilai Raport (Proses)</span>
                     </a>
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="upload-raport.php" class="sidebar-menu__link">
+                    <a href="{{ route('dashboard') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-upload"></i></span>
-                        <span class="text">Upload Nilai Raport</span>
+                        <span class="text">Upload Nilai Raport (Proses)</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
+                <li class="sidebar-menu__item {{ request()->is('admin/kalender*') ? 'activePage' : '' }}"">
                     <a href="{{ route('admin.kalender.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-calendar-dots"></i></span>
                         <span class="text">Kalender</span>
@@ -87,7 +87,7 @@
                         <span class="text">Akun Siswa</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
+                <li class="sidebar-menu__item {{ request()->is('superadmin/settings*') ? 'activePage' : '' }}"">
                     <a href="{{ route('admin.settings') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-gear"></i></span>
                         <span class="text">Pengaturan</span>
