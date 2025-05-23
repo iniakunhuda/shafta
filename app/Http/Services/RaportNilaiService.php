@@ -59,5 +59,52 @@ class RaportNilaiService
             ->get();
     }
     
+    public function averageRaportNilaiByRaportId($raportId, $kategori)
+    {
+        return number_format($this->raportNilai
+            ->whereHas('pelajaran', function ($query) use ($kategori) {
+                $query->where('kategori', $kategori);
+            })
+            ->where('id_raport', $raportId)
+            ->avg('nilai'), 2);
     }
+
+    public function getRankingRaportNilaiByRaportId($raportId, $kategori, $kelasId)
+    {
+        // Get the average score for the specific student
+        $nilaiSiswa = $this->raportNilai
+            ->whereHas('pelajaran', function ($query) use ($kategori) {
+                $query->where('kategori', $kategori);
+            })
+            ->whereHas('raport', function ($query) use ($kelasId) {
+                $query->where('id_kelas', $kelasId);
+            })
+            ->where('id_raport', $raportId)
+            ->avg('nilai');
+
+        // Get all students' average scores in the same class
+        $semuaNilaiSiswa = $this->raportNilai
+            ->whereHas('pelajaran', function ($query) use ($kategori) {
+                $query->where('kategori', $kategori);
+            })
+            ->whereHas('raport', function ($query) use ($kelasId) {
+                $query->where('id_kelas', $kelasId);
+            })
+            ->select('id_raport')
+            ->selectRaw('AVG(nilai) as rata_rata')
+            ->groupBy('id_raport')
+            ->orderByDesc('rata_rata')
+            ->get();
+
+        // Find the student's rank
+        $ranking = 1;
+        foreach ($semuaNilaiSiswa as $nilai) {
+            if ($nilai->rata_rata > $nilaiSiswa) {
+                $ranking++;
+            }
+        }
+
+        return $ranking;
+    }
+}
 

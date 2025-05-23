@@ -63,13 +63,24 @@ class SiswaController extends Controller
 
     public function show($id)
     {
+        // get siswa
         $siswa = $this->siswaService->getSiswaById($id);
+        // get tahun ajaran && tahun ajaran aktif
         $tahunAjaran = $this->tahunAjaranService->getAll();
         $tahunAjaranActive = $this->tahunAjaranService->getActive();
+        // get raport by siswa id and tahun ajaran id
         $raport = $this->raportService->getRaportBySiswaIdAndTahunAjaranId($id, $tahunAjaranActive->id);
+        // get jumlah siswa
+        $jumlahSiswa = $this->raportService->getJumlahSiswaByTahunAjaranId($tahunAjaranActive->id, $raport->id_kelas);
+        // get raport nilai umum by raport id
         $raportNilaiUmum = $this->raportNilaiService->getRaportNilaiByRaportId($raport->id, 'umum');
+        // get rata rata nilai umum by raport id
+        $rataRataNilaiUmum = $this->raportNilaiService->averageRaportNilaiByRaportId($raport->id, 'umum');
+        // get raport nilai shafta by raport id
         $raportNilaiShafta = $this->raportNilaiService->getRaportNilaiByRaportId($raport->id, 'shafta');
-        return view('admin.siswa.show', compact('siswa', 'raport', 'tahunAjaran', 'tahunAjaranActive', 'raportNilaiUmum', 'raportNilaiShafta'));
+        // get ranking raport nilai umum by raport id
+        $rankingRaportNilaiUmum = $this->raportNilaiService->getRankingRaportNilaiByRaportId($raport->id, 'umum', $raport->id_kelas);
+        return view('admin.siswa.show', compact('siswa', 'raport', 'tahunAjaran', 'tahunAjaranActive', 'raportNilaiUmum', 'raportNilaiShafta', 'rataRataNilaiUmum', 'jumlahSiswa', 'rankingRaportNilaiUmum'));
     }
 
     public function toggleActive($id)

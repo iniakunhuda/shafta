@@ -16,90 +16,94 @@
     <main>
 
        
-  <!-- Profile Header -->
-  <div class="profile-header mb-4">
-    <div class="row">
-        <div class="col-md-3 text-center">
-            <img src="{{ asset('storage/siswa/' . $siswa->foto) }}" alt="{{ $siswa->nama }}" class="profile-image mb-3">
-            <h4 class="mb-1">{{ $siswa->nama }}</h4>
-            <p class="text-muted mb-2">Siswa Kelas {{ $siswa->kelas }}</p>
-        </div>
-        <div class="col-md-9">
-            <div class="student-details">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5 class="mb-3">Informasi Pribadi</h5>
-                        <table class="table table-borderless">
-                            <tr>
-                                <td width="140">NIS</td>
-                                <td width="20">:</td>
-                                <td>{{ $siswa->nis }}</td>
-                            </tr>
-                            <tr>
-                                <td>NISN</td>
-                                <td>:</td>
-                                <td>{{ $siswa->nisn }}</td>
-                            </tr>
-                            <tr>
-                                <td>Kelas</td>
-                                <td>:</td>
-                                <td>{{ $siswa->kelas }}</td>
-                            </tr>
-                            <tr>
-                                <td>Jenis Kelamin</td>
-                                <td>:</td>
-                                <td>{{ $siswa->jenis_kelamin }}</td>
-                            </tr>
-                            <tr>
-                                <td>TTL</td>
-                                <td>:</td>
-                                <td>{{ $siswa->tempat_lahir }}, {{ date('d F Y', strtotime($siswa->tanggal_lahir)) }}</td>
-                            </tr>
-                            <tr>
-                                <td>Alamat</td>
-                                <td>:</td>
-                                <td>{{ $siswa->alamat }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <h5 class="mb-3">Informasi Orang Tua</h5>
-                        <table class="table table-borderless">
-                            <tr>
-                                <td width="140">Nama Ayah</td>
-                                <td width="20">:</td>
-                                <td>{{ $siswa->ayah_nama }}</td>
-                            </tr>
-                            <tr>
-                                <td>Pekerjaan Ayah</td>
-                                <td>:</td>
-                                <td>{{ $siswa->ayah_pekerjaan }}</td>
-                            </tr>
-                            <tr>
-                                <td>Nama Ibu</td>
-                                <td>:</td>
-                                <td>{{ $siswa->ibu_nama }}</td>
-                            </tr>
-                            <tr>
-                                <td>Pekerjaan Ibu</td>
-                                <td>:</td>
-                                <td>{{ $siswa->ibu_pekerjaan }}</td>
-                            </tr>
-                            <tr>
-                                <td>No. Telepon</td>
-                                <td>:</td>
-                                <td>{{ $siswa->ayah_telp }}</td>
-                            </tr>
-                        </table>
+  <div class="card">
+    <div class="card-body">
+      <!-- Profile Header -->
+      <div class="profile-header mb-4">
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <img src="{{ asset('storage/siswa/' . $siswa->foto) }}" alt="{{ $siswa->nama }}" class="profile-image mb-3">
+                <h4 class="mb-1">{{ $siswa->nama }}</h4>
+                <p class="text-muted mb-2">Siswa Kelas {{ $siswa->kelas }}</p>
+            </div>
+            <div class="col-md-9">
+                <div class="student-details">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Informasi Pribadi</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td width="140">NIS</td>
+                                    <td width="20">:</td>
+                                    <td>{{ $siswa->nis }}</td>
+                                </tr>
+                                <tr>
+                                    <td>NISN</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->nisn }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Kelas</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->kelas }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Jenis Kelamin</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->jenis_kelamin }}</td>
+                                </tr>
+                                <tr>
+                                    <td>TTL</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->tempat_lahir }}, {{ date('d F Y', strtotime($siswa->tanggal_lahir)) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Alamat</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->alamat }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Informasi Orang Tua</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td width="140">Nama Ayah</td>
+                                    <td width="20">:</td>
+                                    <td>{{ $siswa->ayah_nama }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pekerjaan Ayah</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->ayah_pekerjaan }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Nama Ibu</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->ibu_nama }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pekerjaan Ibu</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->ibu_pekerjaan }}</td>
+                                </tr>
+                                <tr>
+                                    <td>No. Telepon</td>
+                                    <td>:</td>
+                                    <td>{{ $siswa->ayah_telp }}</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
 <!-- Tabs Section -->
-<div class="card">
+<div class="card mt-8">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs" id="studentTabs" role="tablist">
             <li class="nav-item" role="presentation">
@@ -169,23 +173,23 @@
                 </div>
 
                 <!-- Academic Summary Card -->
-                @if(isset($nilaiUmum))
+                @if(isset($rataRataNilaiUmum))
                 <div class="card card-academic-summary mt-4">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4 text-center">
                                 <h6 class="mb-2">Rata-rata Nilai</h6>
-                                <h2 class="mb-0">{{ $nilaiUmum[0]['rata_rata'] }}</h2>
+                                <h2 class="mb-0">{{ $rataRataNilaiUmum }}</h2>
                             </div>
                             <div class="col-md-4 text-center border-start border-end">
                                 <h6 class="mb-2">Ranking Kelas</h6>
-                                <h2 class="mb-0">{{ $nilaiUmum[0]['ranking'] }}</h2>
-                                <small class="text-muted">dari {{ $nilaiUmum[0]['total_siswa'] }} siswa</small>
+                                <h2 class="mb-0">{{ $rankingRaportNilaiUmum ?? '-' }}</h2>
+                                <small class="text-muted">dari {{ $jumlahSiswa ?? 0 }} siswa</small>
                             </div>
                             <div class="col-md-4 text-center">
                                 <h6 class="mb-2">Semester</h6>
-                                <h5 class="mb-0">{{ $nilaiUmum[0]['semester'] }}</h5>
-                                <small class="text-muted">{{ $nilaiUmum[0]['tahun_ajaran'] }}</small>
+                                <h5 class="mb-0">{{ $raport->semester }}</h5>
+                                <small class="text-muted">{{ $raport->tahun_ajaran }}</small>
                             </div>
                         </div>
                     </div>

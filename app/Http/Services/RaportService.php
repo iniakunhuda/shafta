@@ -52,6 +52,10 @@ class RaportService
     {
         return $this->raport->where('id_siswa', $siswaId)->where('id_tahun_ajaran', $tahunAjaranId)->first();
     }
-    
+
+    public function getJumlahSiswaByTahunAjaranId($tahunAjaranId, $kelasId)
+    {
+        return $this->raport->where('id_tahun_ajaran', $tahunAjaranId)->where('id_kelas', $kelasId)->count();
+    }
 
 }
