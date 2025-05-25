@@ -9832,3 +9832,8 @@ button:focus {
 
 /* Email Css End */
 /*# sourceMappingURL=main.css.map */
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    --bs-table-color-type: #000 !important;
+    --bs-table-bg-type: rgba(0,0,0, 0.05) !important;
+}

@@ -41,7 +41,6 @@
                             <th class="h6 text-gray-300">NISN</th>
                             <th class="h6 text-gray-300">Nama</th>
                             <th class="h6 text-gray-300">Jenis Kelamin</th>
-                            <th class="h6 text-gray-300">Tempat Lahir</th>
                             <th class="h6 text-gray-300">Actions</th>
                         </tr>
                     </thead>
@@ -60,9 +59,6 @@
                                 </td>
                                 <td>
                                     <span class="h6 mb-0 fw-medium text-gray-300">{{ $s->jenis_kelamin == 'l' ? 'Laki-laki' : 'Perempuan' }}</span>
-                                </td>
-                                <td>
-                                    <span class="h6 mb-0 fw-medium text-gray-300">{{ $s->tempat_lahir }}</span>
                                 </td>
                                 <td>
                                     <div class="dropdown">
@@ -132,7 +128,7 @@
                 info: true,
                 paging: true,
                 "columnDefs": [
-                    { "orderable": false, "targets": 6 }
+                    { "orderable": false, "targets": 5 }
                 ],
             });
 

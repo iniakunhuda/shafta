@@ -77,16 +77,16 @@
                                                 </a>
                                             </li>
                                             <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li>
                                                 <form action="{{ route('admin.kelas.destroy', $k->id) }}" method="POST" class="dropdown-item-form" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="dropdown-item">
+                                                    <button type="submit" class="dropdown-item text-danger">
                                                         <i class="ph ph-trash me-2"></i> Hapus
                                                     </button>
                                                 </form>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
                                             </li>
                                         </ul>
                                     </div>

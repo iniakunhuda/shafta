@@ -126,8 +126,8 @@
 
 
 .table-striped>tbody>tr:nth-of-type(odd)>* {
-    --bs-table-color-type: var(--bs-table-striped-color) !important;
-    --bs-table-bg-type: var(--bs-table-striped-bg) !important;
+    --bs-table-color-type: #000 !important;
+    --bs-table-bg-type: rgba(0,0,0, 0.05) !important;
 }
 
 select {
