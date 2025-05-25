@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Pelajaran;
 use App\Models\RaportNilai;
 
 class RaportNilaiService
@@ -48,15 +49,32 @@ class RaportNilaiService
         return $this->raportNilai->where('id_tahun_ajaran', $tahunAjaranId)->get();
     }
     
-    public function getRaportNilaiByRaportId($raportId, $kategori)
+    public function getRaportNilaiUmumByRaportId($raportId)
     {
         return $this->raportNilai
             ->with('pelajaran')
-            ->whereHas('pelajaran', function ($query) use ($kategori) {
-                $query->where('kategori', $kategori);
+            ->whereHas('pelajaran', function ($query) {
+                $query->where('kategori', 'umum');
             })
             ->where('id_raport', $raportId)
             ->get();
+    }
+
+    public function getRaportNilaiShaftaByRaportId($raportId)
+    {
+        $raportNilai = $this->raportNilai
+            ->with('pelajaran')
+            ->whereHas('pelajaran', function ($query) {
+                $query->where('kategori', 'shafta');
+            })
+            ->where('id_raport', $raportId)
+            ->get();
+        $raportNilaiGroupped = [];
+        foreach ($raportNilai as $item) {
+            $parentPelajaran = Pelajaran::find($item->pelajaran->id_parent_pelajaran);
+            $raportNilaiGroupped[$parentPelajaran->judul][] = $item;
+        }
+        return $raportNilaiGroupped;
     }
     
     public function averageRaportNilaiByRaportId($raportId, $kategori)

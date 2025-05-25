@@ -9,7 +9,7 @@ use App\Http\Services\SiswaService;
 use App\Http\Services\RaportService;
 use App\Http\Services\TahunAjaranService;
 use App\Http\Services\RaportNilaiService;
-use Illuminate\Http\Request;
+use App\Http\Services\RaportSikapService;
 
 class SiswaController extends Controller
 {
@@ -17,12 +17,14 @@ class SiswaController extends Controller
     protected $raportService;
     protected $tahunAjaranService;
     protected $raportNilaiService;
-    public function __construct(SiswaService $siswaService, RaportService $raportService, TahunAjaranService $tahunAjaranService, RaportNilaiService $raportNilaiService)
+    protected $raportSikapService;
+    public function __construct(SiswaService $siswaService, RaportService $raportService, TahunAjaranService $tahunAjaranService, RaportNilaiService $raportNilaiService, RaportSikapService $raportSikapService)
     {
         $this->siswaService = $siswaService;
         $this->raportService = $raportService;
         $this->tahunAjaranService = $tahunAjaranService;
         $this->raportNilaiService = $raportNilaiService;
+        $this->raportSikapService = $raportSikapService;
     }
 
     public function index()
@@ -73,14 +75,17 @@ class SiswaController extends Controller
         // get jumlah siswa
         $jumlahSiswa = $this->raportService->getJumlahSiswaByTahunAjaranId($tahunAjaranActive->id, $raport->id_kelas);
         // get raport nilai umum by raport id
-        $raportNilaiUmum = $this->raportNilaiService->getRaportNilaiByRaportId($raport->id, 'umum');
+        $raportNilaiUmum = $this->raportNilaiService->getRaportNilaiUmumByRaportId($raport->id);
         // get rata rata nilai umum by raport id
         $rataRataNilaiUmum = $this->raportNilaiService->averageRaportNilaiByRaportId($raport->id, 'umum');
         // get raport nilai shafta by raport id
-        $raportNilaiShafta = $this->raportNilaiService->getRaportNilaiByRaportId($raport->id, 'shafta');
+        $raportNilaiShafta = $this->raportNilaiService->getRaportNilaiShaftaByRaportId($raport->id);
         // get ranking raport nilai umum by raport id
         $rankingRaportNilaiUmum = $this->raportNilaiService->getRankingRaportNilaiByRaportId($raport->id, 'umum', $raport->id_kelas);
-        return view('admin.siswa.show', compact('siswa', 'raport', 'tahunAjaran', 'tahunAjaranActive', 'raportNilaiUmum', 'raportNilaiShafta', 'rataRataNilaiUmum', 'jumlahSiswa', 'rankingRaportNilaiUmum'));
+
+        // get raport sikap by raport id
+        $raportSikap = $this->raportSikapService->getRaportSikapByRaportId($raport->id);
+        return view('admin.siswa.show', compact('siswa', 'raport', 'tahunAjaran', 'tahunAjaranActive', 'raportNilaiUmum', 'raportNilaiShafta', 'rataRataNilaiUmum', 'jumlahSiswa', 'rankingRaportNilaiUmum', 'raportSikap'));
     }
 
     public function toggleActive($id)

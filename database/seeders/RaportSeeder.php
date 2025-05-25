@@ -91,10 +91,10 @@ class RaportSeeder extends Seeder
             'BANJARI' => ['judul' => 'Banjari', 'deskripsi' => 'Banjari', 'kategori' => 'umum', 'kategori_matkul' => 'eskul'],
             'BASKET' => ['judul' => 'Basket', 'deskripsi' => 'Basket', 'kategori' => 'umum', 'kategori_matkul' => 'eskul'],
 
-            // Pengembangan Bidang Studi
-            'BAHASA_ARAB' => ['judul' => 'B. Arab', 'deskripsi' => 'Bahasa Arab', 'kategori' => 'shafta', 'kategori_matkul' => null],
-            'NUMERASI' => ['judul' => 'Numerasi', 'deskripsi' => 'Numerasi', 'kategori' => 'shafta', 'kategori_matkul' => null],
-            'LITERASI' => ['judul' => 'Literasi', 'deskripsi' => 'Literasi', 'kategori' => 'shafta', 'kategori_matkul' => null],
+            // Penunjang
+            'SPIRITUAL' => ['judul' => 'Spiritual', 'deskripsi' => 'Spiritual', 'kategori' => 'shafta', 'kategori_matkul' => null],
+            'KEPRIBADIAN' => ['judul' => 'Kepribadian', 'deskripsi' => 'Kepribadian', 'kategori' => 'shafta', 'kategori_matkul' => null],
+            'KEDISIPLINAN' => ['judul' => 'Kedisiplinan', 'deskripsi' => 'Kedisiplinan', 'kategori' => 'shafta', 'kategori_matkul' => null],
         ];
 
         $pelajaranModels = [];

@@ -50,7 +50,7 @@
                                 <tr>
                                     <td>Jenis Kelamin</td>
                                     <td>:</td>
-                                    <td>{{ $siswa->jenis_kelamin }}</td>
+                                    <td>{{ $siswa->jenis_kelamin == 'l' ? 'Laki-laki' : 'Perempuan' }}</td>
                                 </tr>
                                 <tr>
                                     <td>TTL</td>
@@ -188,8 +188,8 @@
                             </div>
                             <div class="col-md-4 text-center">
                                 <h6 class="mb-2">Semester</h6>
-                                <h5 class="mb-0">{{ $raport->semester }}</h5>
-                                <small class="text-muted">{{ $raport->tahun_ajaran }}</small>
+                                <h5 class="mb-0">{{ $raport->tahunAjaran->semester }}</h5>
+                                <small class="text-muted">{{ $raport->tahunAjaran->nama }}</small>
                             </div>
                         </div>
                     </div>
@@ -200,21 +200,12 @@
             <!-- Nilai Keshaftaan Tab -->
             @if(isset($raportNilaiShafta))
             <div class="tab-pane fade" id="nilai-keshaftaan-tab-pane" role="tabpanel" aria-labelledby="nilai-keshaftaan-tab" tabindex="0">
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <select class="form-select">
-                                @foreach ($tahunAjaran as $item)
-                                    <option value="{{ $item->id }}" {{ $tahunAjaranActive->id == $item->id ? 'selected' : '' }}>{{ $item->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                
 
+                @foreach ($raportNilaiShafta as $index => $item)
                 <!-- Bahasa Arab Section -->
                 <div class="category-heading">
-                    <i class="ph ph-book me-2"></i> Bahasa Arab
+                    <i class="ph ph-book me-2"></i> {{ $index }}
                 </div>
                 <div class="table-responsive mb-4">
                     <table class="table table-bordered table-striped">
@@ -227,49 +218,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($raportNilaiShafta as $index => $item)
+                            @foreach ($item as $i => $item2)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->pelajaran->judul }}</td>
-                                <td>{{ $item->nilai }}</td>
-                                <td>{{ $item->keterangan }}</td>
+                                <td>{{ $i + 1 }}</td>
+                                <td>{{ $item2->pelajaran->judul }}</td>
+                                <td>{{ $item2->nilai }}</td>
+                                <td>{{ $item2->keterangan }}</td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Numerasi Section -->
-                <div class="category-heading">
-                    <i class="ph ph-calculator me-2"></i> Numerasi
-                </div>
-                <div class="table-responsive mb-4">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th width="5%">No</th>
-                                <th width="30%">Kategori</th>
-                                <th width="15%">Nilai</th>
-                                <th>Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($raportNilaiShafta as $index => $item)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->pelajaran->judul }}</td>
-                                <td>{{ $item->nilai }}</td>
-                                <td>{{ $item->keterangan }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                @endforeach
 
             
 
                 <!-- Keshaftaan Summary Card -->
-                <div class="card card-academic-summary mt-4">
+                {{-- <div class="card card-academic-summary mt-4">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3 text-center">
@@ -290,28 +255,20 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
             @endif
 
             <!-- Nilai Sikap Tab -->
-            @if(isset($nilaiSikap))
+            @if(isset($raportSikap) && count($raportSikap) > 0)
             <div class="tab-pane fade" id="nilai-sikap-tab-pane" role="tabpanel" aria-labelledby="nilai-sikap-tab" tabindex="0">
                 <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <select class="form-select">
-                                <option selected>Semester 1 (2024/2025)</option>
-                                <option>Semester 2 (2023/2024)</option>
-                                <option>Semester 1 (2023/2024)</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Spiritual Section -->
+                @foreach ($raportSikap as $index => $item)
                 <div class="category-heading">
-                    <i class="ph ph-heart me-2"></i> Sikap Spiritual
+                    <i class="ph ph-heart me-2"></i> {{ $index }}
                 </div>
                 <div class="table-responsive mb-4">
                     <table class="table table-bordered table-striped">
@@ -324,24 +281,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($nilaiSikap[0]['spiritual'] as $index => $item)
+                            @foreach ($item as $i => $item2)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $item['aspek'] }}</td>
+                                <td>{{ $i + 1 }}</td>
+                                <td>{{ $item2->sikap->judul }}</td>
                                 <td>
-                                    <span class="badge {{ $item['nilai'] == 'A' ? 'bg-success' : 'bg-primary' }}">
-                                        {{ $item['nilai'] }}
+                                    <span class="badge {{ $item2->nilai == 'A' ? 'bg-success' : 'bg-primary' }}">
+                                        {{ $item2->nilai }}
                                     </span>
                                 </td>
-                                <td>{{ $item['keterangan'] }}</td>
+                                <td>{{ $item2->keterangan }}</td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+                @endforeach
 
                 <!-- Sosial Section -->
-                <div class="category-heading">
+                {{-- <div class="category-heading">
                     <i class="ph ph-users-three me-2"></i> Sikap Sosial
                 </div>
                 <div class="table-responsive mb-4">
@@ -369,17 +327,17 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
+                </div> --}}
 
                 <!-- Catatan Guru -->
-                <div class="card mt-4">
+                {{-- <div class="card mt-4">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="ph ph-note-pencil me-2"></i> Catatan Guru</h5>
                     </div>
                     <div class="card-body">
                         <p>{{ $nilaiSikap[0]['catatan_guru'] }}</p>
                     </div>
-                </div>
+                </div> --}}
             </div>
             @endif
         </div>
