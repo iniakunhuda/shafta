@@ -10,6 +10,7 @@ use App\Http\Services\RaportService;
 use App\Http\Services\TahunAjaranService;
 use App\Http\Services\RaportNilaiService;
 use App\Http\Services\RaportSikapService;
+use App\Http\Services\ExportService;
 
 class SiswaController extends Controller
 {
@@ -18,13 +19,22 @@ class SiswaController extends Controller
     protected $tahunAjaranService;
     protected $raportNilaiService;
     protected $raportSikapService;
-    public function __construct(SiswaService $siswaService, RaportService $raportService, TahunAjaranService $tahunAjaranService, RaportNilaiService $raportNilaiService, RaportSikapService $raportSikapService)
-    {
+    protected $exportService;
+
+    public function __construct(
+        SiswaService $siswaService, 
+        RaportService $raportService, 
+        TahunAjaranService $tahunAjaranService, 
+        RaportNilaiService $raportNilaiService, 
+        RaportSikapService $raportSikapService,
+        ExportService $exportService
+    ) {
         $this->siswaService = $siswaService;
         $this->raportService = $raportService;
         $this->tahunAjaranService = $tahunAjaranService;
         $this->raportNilaiService = $raportNilaiService;
         $this->raportSikapService = $raportSikapService;
+        $this->exportService = $exportService;
     }
 
     public function index()
@@ -69,7 +79,9 @@ class SiswaController extends Controller
         $siswa = $this->siswaService->getSiswaById($id);
         // get tahun ajaran && tahun ajaran aktif
         $tahunAjaran = $this->tahunAjaranService->getAll();
-        $tahunAjaranActive = $this->tahunAjaranService->getActive();
+        $tahunAjaranActive = request()->has('tahun_ajaran_id') 
+            ? $this->tahunAjaranService->getById(request('tahun_ajaran_id'))
+            : $this->tahunAjaranService->getActive();
         // get raport by siswa id and tahun ajaran id
         $raport = $this->raportService->getRaportBySiswaIdAndTahunAjaranId($id, $tahunAjaranActive->id);
         // get jumlah siswa
@@ -92,5 +104,39 @@ class SiswaController extends Controller
     {
         $this->siswaService->toggleActive($id);
         return redirect()->route('admin.siswa.index')->with('success', 'Status siswa berhasil diubah');
+    }
+
+    /**
+     * Export raport data to CSV format
+     *
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function exportCsv($id)
+    {
+        $tahunAjaranActive = request()->has('tahun_ajaran_id') 
+            ? $this->tahunAjaranService->getById(request('tahun_ajaran_id'))
+            : $this->tahunAjaranService->getActive();
+            
+        $raport = $this->raportService->getRaportBySiswaIdAndTahunAjaranId($id, $tahunAjaranActive->id);
+        
+        return $this->exportService->exportRaportToCsv($raport->id);
+    }
+
+    /**
+     * Export raport data to Excel format
+     *
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function exportExcel($id)
+    {
+        $tahunAjaranActive = request()->has('tahun_ajaran_id') 
+            ? $this->tahunAjaranService->getById(request('tahun_ajaran_id'))
+            : $this->tahunAjaranService->getActive();
+            
+        $raport = $this->raportService->getRaportBySiswaIdAndTahunAjaranId($id, $tahunAjaranActive->id);
+        
+        return $this->exportService->exportRaportToExcel($raport->id);
     }
 }
