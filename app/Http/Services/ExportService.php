@@ -46,7 +46,7 @@ class ExportService
 
             $callback = function() use ($raport, $nilaiUmum, $nilaiShafta, $nilaiSikap) {
                 $file = fopen('php://output', 'w');
-                
+
                 // Add student information
                 fputcsv($file, ['INFORMASI SISWA']);
                 fputcsv($file, ['NIS', $raport->siswa->nis]);
@@ -58,15 +58,14 @@ class ExportService
 
                 // Add academic scores
                 fputcsv($file, ['NILAI UMUM']);
-                fputcsv($file, ['No', 'Mata Pelajaran', 'KKM', 'Nilai', 'Predikat']);
-                
+                fputcsv($file, ['No', 'Mata Pelajaran', 'KKM', 'Nilai']);
+
                 foreach ($nilaiUmum as $index => $nilai) {
                     fputcsv($file, [
                         $index + 1,
                         $nilai->pelajaran->judul,
                         $nilai->pelajaran->kkm ?? '-',
-                        $nilai->nilai,
-                        $nilai->nilai_huruf
+                        $nilai->nilai
                     ]);
                 }
                 fputcsv($file, []);
@@ -74,7 +73,7 @@ class ExportService
                 // Add Keshaftaan scores
                 fputcsv($file, ['NILAI KESHAFTAAN']);
                 fputcsv($file, ['No', 'Mata Pelajaran', 'Nilai', 'Keterangan']);
-                
+
                 foreach ($nilaiShafta as $index => $nilai) {
                     fputcsv($file, [
                         $index + 1,
@@ -88,7 +87,7 @@ class ExportService
                 // Add Sikap scores
                 fputcsv($file, ['NILAI SIKAP']);
                 fputcsv($file, ['No', 'Aspek', 'Nilai', 'Keterangan']);
-                
+
                 foreach ($nilaiSikap as $index => $nilai) {
                     fputcsv($file, [
                         $index + 1,
@@ -162,13 +161,13 @@ class ExportService
             $sheet->setCellValue('A' . $row, 'NILAI UMUM');
             $sheet->mergeCells('A' . $row . ':E' . $row);
             $row++;
-            
+
             $sheet->setCellValue('A' . $row, 'No');
             $sheet->setCellValue('B' . $row, 'Mata Pelajaran');
             $sheet->setCellValue('C' . $row, 'KKM');
             $sheet->setCellValue('D' . $row, 'Nilai');
             $sheet->setCellValue('E' . $row, 'Predikat');
-            
+
             // Style header
             $sheet->getStyle('A' . $row . ':E' . $row)->applyFromArray([
                 'font' => ['bold' => true],
@@ -191,12 +190,12 @@ class ExportService
             $sheet->setCellValue('A' . $row, 'NILAI KESHAFTAAN');
             $sheet->mergeCells('A' . $row . ':D' . $row);
             $row++;
-            
+
             $sheet->setCellValue('A' . $row, 'No');
             $sheet->setCellValue('B' . $row, 'Mata Pelajaran');
             $sheet->setCellValue('C' . $row, 'Nilai');
             $sheet->setCellValue('D' . $row, 'Keterangan');
-            
+
             // Style header
             $sheet->getStyle('A' . $row . ':D' . $row)->applyFromArray([
                 'font' => ['bold' => true],
@@ -218,12 +217,12 @@ class ExportService
             $sheet->setCellValue('A' . $row, 'NILAI SIKAP');
             $sheet->mergeCells('A' . $row . ':D' . $row);
             $row++;
-            
+
             $sheet->setCellValue('A' . $row, 'No');
             $sheet->setCellValue('B' . $row, 'Aspek');
             $sheet->setCellValue('C' . $row, 'Nilai');
             $sheet->setCellValue('D' . $row, 'Keterangan');
-            
+
             // Style header
             $sheet->getStyle('A' . $row . ':D' . $row)->applyFromArray([
                 'font' => ['bold' => true],
@@ -254,7 +253,7 @@ class ExportService
             // Create Excel file
             $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
             $filename = 'raport_' . $raport->siswa->nis . '_' . $raport->tahunAjaran->nama . '.xlsx';
-            
+
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="' . $filename . '"');
             header('Cache-Control: max-age=0');
@@ -265,4 +264,4 @@ class ExportService
             return Response::json(['error' => 'Failed to export data: ' . $e->getMessage()], 500);
         }
     }
-} 
+}

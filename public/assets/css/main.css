@@ -231,6 +231,7 @@
     --font-4xl: 2.25rem;
     --font-5xl: 3rem;
     --font-6xl: 3.75rem;
+    --bs-nav-link-color: var(--main);
 }
 
 /* ========================= Variable Css End ======================== */
@@ -9836,4 +9837,12 @@ button:focus {
 .table-striped>tbody>tr:nth-of-type(odd)>* {
     --bs-table-color-type: #000 !important;
     --bs-table-bg-type: rgba(0,0,0, 0.05) !important;
+}
+
+.nav-tabs .nav-link.active {
+    border-color: hsl(var(--main)) !important;
+}
+
+.nav-link {
+    color: hsl(var(--main)) !important;
 }
