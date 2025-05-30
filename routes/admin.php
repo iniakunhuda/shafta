@@ -27,6 +27,9 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
     Route::put('/settings', [PengaturanWebsiteController::class, 'update'])->name('admin.settings.update');
 });
 
+Route::get('/admin/siswa/{id}/export/csv', [App\Http\Controllers\Admin\SiswaController::class, 'exportCsv'])->name('admin.siswa.export.csv');
+Route::get('/admin/siswa/{id}/export/excel', [App\Http\Controllers\Admin\SiswaController::class, 'exportExcel'])->name('admin.siswa.export.excel');
+
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->group(function () {
