@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Kalender;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -34,7 +35,15 @@ class RaportSeeder extends Seeder
         ]);
 
         // Create Tahun Ajaran
-        $tahunAjaran = TahunAjaran::create([
+        $tahunAjaran1 = TahunAjaran::create([
+            'nama' => '2023/2024',
+            'semester' => 'Semester 2',
+            'start_date' => '2024-01-15',
+            'end_date' => '2024-06-20',
+            'is_active' => false,
+        ]);
+
+        $tahunAjaran2 = TahunAjaran::create([
             'nama' => '2024/2025',
             'semester' => 'Semester 1',
             'start_date' => '2024-07-15',
@@ -42,19 +51,28 @@ class RaportSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Create Kelas
+        // Create Kelas for both tahun ajaran
         $kelas = [
             'X 1', 'X 2', 'X 3', 'X 4',
             'XI 1', 'XI 2', 'XI 3', 'XI 4',
             'XII 1', 'XII 2', 'XII 3', 'XII 4',
         ];
 
-        $kelasModels = [];
+        $kelasModels1 = [];
+        $kelasModels2 = [];
         foreach ($kelas as $k) {
-            $kelasModels[$k] = Kelas::create([
+            $kelasModels1[$k] = Kelas::create([
                 'nama' => $k,
                 'maksimum' => 30,
                 'wali_kelas_nama' => 'Wali Kelas ' . $k,
+                'id_tahunajaran' => $tahunAjaran1->id,
+            ]);
+
+            $kelasModels2[$k] = Kelas::create([
+                'nama' => $k,
+                'maksimum' => 30,
+                'wali_kelas_nama' => 'Wali Kelas ' . $k,
+                'id_tahunajaran' => $tahunAjaran2->id,
             ]);
         }
 
@@ -89,10 +107,10 @@ class RaportSeeder extends Seeder
             'BANJARI' => ['judul' => 'Banjari', 'deskripsi' => 'Banjari', 'kategori' => 'umum', 'kategori_matkul' => 'eskul'],
             'BASKET' => ['judul' => 'Basket', 'deskripsi' => 'Basket', 'kategori' => 'umum', 'kategori_matkul' => 'eskul'],
 
-            // Pengembangan Bidang Studi
-            'BAHASA_ARAB' => ['judul' => 'B. Arab', 'deskripsi' => 'Bahasa Arab', 'kategori' => 'shafta', 'kategori_matkul' => null],
-            'NUMERASI' => ['judul' => 'Numerasi', 'deskripsi' => 'Numerasi', 'kategori' => 'shafta', 'kategori_matkul' => null],
-            'LITERASI' => ['judul' => 'Literasi', 'deskripsi' => 'Literasi', 'kategori' => 'shafta', 'kategori_matkul' => null],
+            // Penunjang
+            'SPIRITUAL' => ['judul' => 'Spiritual', 'deskripsi' => 'Spiritual', 'kategori' => 'shafta', 'kategori_matkul' => null],
+            'KEPRIBADIAN' => ['judul' => 'Kepribadian', 'deskripsi' => 'Kepribadian', 'kategori' => 'shafta', 'kategori_matkul' => null],
+            'KEDISIPLINAN' => ['judul' => 'Kedisiplinan', 'deskripsi' => 'Kedisiplinan', 'kategori' => 'shafta', 'kategori_matkul' => null],
         ];
 
         $pelajaranModels = [];
@@ -674,8 +692,9 @@ class RaportSeeder extends Seeder
             ],
         ];
 
+        // Create students and their reports for both academic years
         foreach ($students as $studentData) {
-            // Create Siswa for each student
+            // Create Siswa
             $siswa = Siswa::create([
                 'nis' => $studentData['nis'],
                 'nisn' => $studentData['nisn'],
@@ -684,7 +703,7 @@ class RaportSeeder extends Seeder
                 'status' => 'active',
             ]);
 
-            // User account for each student based on nis
+            // User account for each student
             User::create([
                 'nama' => $studentData['nama'],
                 'email' => $studentData['nis'].'@shafta.sch.id',
@@ -693,68 +712,194 @@ class RaportSeeder extends Seeder
                 'status' => 'active',
             ]);
 
-            // Create Raport for each student
-            $raport = Raport::create([
+            // Create Raport for Tahun Ajaran 1 (2023/2024)
+            $raport1 = Raport::create([
                 'id_siswa' => $siswa->id,
-                'id_tahun_ajaran' => $tahunAjaran->id,
-                'id_kelas' => $kelasModels[$studentData['kelas']]->id,
+                'id_tahun_ajaran' => $tahunAjaran1->id,
+                'id_kelas' => $kelasModels1[$studentData['kelas']]->id,
                 'sakit' => $studentData['ketidakhadiran']['sakit'] ?? 0,
                 'izin' => $studentData['ketidakhadiran']['izin'] ?? 0,
                 'alpa' => $studentData['ketidakhadiran']['alpa'] ?? 0,
-                'catatan' => 'Catatan untuk ' . $siswa->nama,
+                'catatan' => 'Catatan Semester 2 2023/2024 untuk ' . $siswa->nama,
                 'prestasi' => null,
             ]);
 
-            // Create Nilai for each subject
+            // Create Raport for Tahun Ajaran 2 (2024/2025)
+            $raport2 = Raport::create([
+                'id_siswa' => $siswa->id,
+                'id_tahun_ajaran' => $tahunAjaran2->id,
+                'id_kelas' => $kelasModels2[$studentData['kelas']]->id,
+                'sakit' => $studentData['ketidakhadiran']['sakit'] ?? 0,
+                'izin' => $studentData['ketidakhadiran']['izin'] ?? 0,
+                'alpa' => $studentData['ketidakhadiran']['alpa'] ?? 0,
+                'catatan' => 'Catatan Semester 1 2024/2025 untuk ' . $siswa->nama,
+                'prestasi' => null,
+            ]);
+
+            // Create Nilai for Tahun Ajaran 1
             foreach ($studentData['nilai'] as $kode => $nilai) {
+                // For Tahun Ajaran 1 (2023/2024), use the base nilai with some variation
+                $nilai1 = max(0, min(100, $nilai + rand(-3, 3)));
                 RaportNilai::create([
-                    'id_raport' => $raport->id,
+                    'id_raport' => $raport1->id,
                     'id_pelajaran' => $pelajaranModels[$kode]->id,
-                    'nilai' => $nilai,
-                    'nilai_huruf' => null,
-                    'catatan' => null,
+                    'nilai' => $nilai1,
+                    'nilai_huruf' => $this->getNilaiHuruf($nilai1),
+                    'catatan' => 'Nilai semester 2 2023/2024',
                 ]);
             }
 
-            // Create Ekskul values
+            // Create Nilai for Tahun Ajaran 2
+            foreach ($studentData['nilai'] as $kode => $nilai) {
+                // For Tahun Ajaran 2 (2024/2025), show improvement or decline based on subject
+                $variation = 0;
+                
+                // Add more variation based on subject type
+                switch ($kode) {
+                    case 'PAI':
+                    case 'PKN':
+                    case 'B_INDO':
+                        // These subjects tend to improve
+                        $variation = rand(2, 5);
+                        break;
+                    case 'MAT':
+                    case 'B_INGG':
+                        // These subjects might have more variation
+                        $variation = rand(-2, 5);
+                        break;
+                    case 'PJOK':
+                    case 'SENI':
+                        // These subjects might have slight decline
+                        $variation = rand(-3, 2);
+                        break;
+                    default:
+                        // Other subjects have moderate variation
+                        $variation = rand(-2, 3);
+                }
+
+                $nilai2 = max(0, min(100, $nilai + $variation));
+                RaportNilai::create([
+                    'id_raport' => $raport2->id,
+                    'id_pelajaran' => $pelajaranModels[$kode]->id,
+                    'nilai' => $nilai2,
+                    'nilai_huruf' => $this->getNilaiHuruf($nilai2),
+                    'catatan' => 'Nilai semester 1 2024/2025',
+                ]);
+            }
+
+            // Create Ekskul values for both academic years
             if (isset($studentData['ekskul'])) {
                 foreach ($studentData['ekskul'] as $kode => $nilai) {
+                    // For Tahun Ajaran 1, use base nilai with small variation
+                    $nilaiEkskul1 = max(0, min(100, $nilai + rand(-2, 2)));
                     RaportNilai::create([
-                        'id_raport' => $raport->id,
+                        'id_raport' => $raport1->id,
                         'id_pelajaran' => $pelajaranModels[$kode]->id,
-                        'nilai' => $nilai,
-                        'nilai_huruf' => null,
-                        'catatan' => null,
+                        'nilai' => $nilaiEkskul1,
+                        'nilai_huruf' => $this->getNilaiHuruf($nilaiEkskul1),
+                        'catatan' => 'Nilai ekstrakurikuler semester 2 2023/2024',
+                    ]);
+
+                    // For Tahun Ajaran 2, show improvement in extracurricular activities
+                    $nilaiEkskul2 = max(0, min(100, $nilaiEkskul1 + rand(1, 5)));
+                    RaportNilai::create([
+                        'id_raport' => $raport2->id,
+                        'id_pelajaran' => $pelajaranModels[$kode]->id,
+                        'nilai' => $nilaiEkskul2,
+                        'nilai_huruf' => $this->getNilaiHuruf($nilaiEkskul2),
+                        'catatan' => 'Nilai ekstrakurikuler semester 1 2024/2025',
                     ]);
                 }
             }
 
-            // Create Sikap for each student
+            // Create Sikap for both academic years
             foreach ($keshaftaanModels as $kode => $sikap) {
+                // For Tahun Ajaran 1, generate base sikap scores
+                $nilaiSikap1 = rand(80, 95);
                 RaportSikap::create([
-                    'id_raport' => $raport->id,
+                    'id_raport' => $raport1->id,
                     'id_sikap' => $sikap->id,
                     'sikap_judul' => $sikap->judul,
                     'sikap_deskripsi' => $sikap->deskripsi,
                     'bobot' => $sikap->bobot,
                     'jumlah' => 0,
-                    'nilai' => 0, // Default value, can be updated later
-                    'keterangan' => null,
+                    'nilai' => $nilaiSikap1,
+                    'keterangan' => 'Keterangan ' . $sikap->judul . ' untuk semester 2 2023/2024',
+                ]);
+
+                // For Tahun Ajaran 2, show improvement in sikap scores
+                $nilaiSikap2 = min(100, $nilaiSikap1 + rand(1, 5));
+                RaportSikap::create([
+                    'id_raport' => $raport2->id,
+                    'id_sikap' => $sikap->id,
+                    'sikap_judul' => $sikap->judul,
+                    'sikap_deskripsi' => $sikap->deskripsi,
+                    'bobot' => $sikap->bobot,
+                    'jumlah' => 0,
+                    'nilai' => $nilaiSikap2,
+                    'keterangan' => 'Keterangan ' . $sikap->judul . ' untuk semester 1 2024/2025',
                 ]);
             }
 
-            // Create Hafalan entries for each student
+            // Create Hafalan entries for both academic years
             foreach ($keshaftaanModels as $kode => $sikap) {
+                // For Tahun Ajaran 1, generate base hafalan scores
+                $nilaiHafalan1 = rand(80, 95);
                 RaportHafalan::create([
-                    'id_tahun_ajaran' => $tahunAjaran->id,
-                    'id_kelas' => $kelasModels[$studentData['kelas']]->id,
+                    'id_tahun_ajaran' => $tahunAjaran1->id,
+                    'id_kelas' => $kelasModels1[$studentData['kelas']]->id,
                     'id_siswa' => $siswa->id,
                     'judul' => $sikap->judul,
-                    'catatan' => null,
-                    'nilai' => 0,
-                    'nilai_huruf' => '',
+                    'catatan' => 'Catatan hafalan semester 2 2023/2024',
+                    'nilai' => $nilaiHafalan1,
+                    'nilai_huruf' => $this->getNilaiHuruf($nilaiHafalan1),
+                ]);
+
+                // For Tahun Ajaran 2, show improvement in hafalan scores
+                $nilaiHafalan2 = min(100, $nilaiHafalan1 + rand(1, 5));
+                RaportHafalan::create([
+                    'id_tahun_ajaran' => $tahunAjaran2->id,
+                    'id_kelas' => $kelasModels2[$studentData['kelas']]->id,
+                    'id_siswa' => $siswa->id,
+                    'judul' => $sikap->judul,
+                    'catatan' => 'Catatan hafalan semester 1 2024/2025',
+                    'nilai' => $nilaiHafalan2,
+                    'nilai_huruf' => $this->getNilaiHuruf($nilaiHafalan2),
                 ]);
             }
         }
+
+        // Create Kalender for both academic years
+        Kalender::create([
+            'title' => 'Ujian Akhir Semester 2 2023/2024',
+            'description' => 'Ujian Akhir Semester untuk ' . $tahunAjaran1->nama,
+            'start' => '2024-06-01',
+            'end' => '2024-06-15',
+            'className' => 'danger',
+            'type' => 'ujian',
+            'user_id' => $adminUser->id,
+        ]);
+
+        Kalender::create([
+            'title' => 'Ujian Akhir Semester 1 2024/2025',
+            'description' => 'Ujian Akhir Semester untuk ' . $tahunAjaran2->nama,
+            'start' => '2024-12-01',
+            'end' => '2024-12-15',
+            'className' => 'danger',
+            'type' => 'ujian',
+            'user_id' => $adminUser->id,
+        ]);
+    }
+
+    /**
+     * Convert numeric score to letter grade
+     */
+    private function getNilaiHuruf($nilai)
+    {
+        if ($nilai >= 90) return 'A';
+        if ($nilai >= 80) return 'B';
+        if ($nilai >= 70) return 'C';
+        if ($nilai >= 60) return 'D';
+        return 'E';
     }
 }
