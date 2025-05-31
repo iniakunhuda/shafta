@@ -20,13 +20,13 @@
 
                 @if(Auth::user()->isSiswa())
                 <li class="sidebar-menu__item">
-                    <a href="/siswa/raport.php" class="sidebar-menu__link">
+                    <a href="/siswa/raport" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-book-open-text"></i></span>
                         <span class="text">Lihat Raport</span>
                     </a>
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="/siswa/detail-raport.php" class="sidebar-menu__link">
+                    <a href="/siswa/detail-raport" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-book"></i></span>
                         <span class="text">Detail Raport</span>
                     </a>

@@ -124,5 +124,16 @@ class RaportNilaiService
 
         return $ranking;
     }
+
+    public function getRaportNilaiBySiswaIdAndTahunAjaranId($siswaId, $tahunAjaranId)
+    {
+        return $this->raportNilai
+            ->with(['pelajaran', 'raport'])
+            ->whereHas('raport', function ($query) use ($siswaId, $tahunAjaranId) {
+                $query->where('id_siswa', $siswaId)
+                    ->where('id_tahun_ajaran', $tahunAjaranId);
+            })
+            ->get();
+    }
 }
 
