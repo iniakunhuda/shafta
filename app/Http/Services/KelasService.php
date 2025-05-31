@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Collection;
 
 class KelasService
 {
+    protected $kelas;
+
+    public function __construct(Kelas $kelas)
+    {
+        $this->kelas = $kelas;
+    }
+
     /**
      * Get all kelas with pagination
      *
@@ -76,5 +83,10 @@ class KelasService
     {
         $kelas = $this->getById($id);
         return $kelas->delete();
+    }
+
+    public function getByTahunAjaranId($tahunAjaranId)
+    {
+        return $this->kelas->where('id_tahunajaran', $tahunAjaranId)->get();
     }
 }
