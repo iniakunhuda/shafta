@@ -27,12 +27,13 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
     Route::put('/settings', [PengaturanWebsiteController::class, 'update'])->name('admin.settings.update');
 });
 
+Route::get('/admin/siswa/{id}/export/csv', [App\Http\Controllers\Admin\SiswaController::class, 'exportCsv'])->name('admin.siswa.export.csv');
+Route::get('/admin/siswa/{id}/export/excel', [App\Http\Controllers\Admin\SiswaController::class, 'exportExcel'])->name('admin.siswa.export.excel');
+
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('kalender', KalenderController::class)->names('admin.kalender');
     Route::resource('tahun_ajaran', TahunAjaranController::class)->names('admin.tahun_ajaran');

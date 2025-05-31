@@ -22,7 +22,7 @@
                             <div class="grettings-box__content py-xl-4">
                                 <h2 class="text-white mb-0">Hello, Admin! </h2>
                                 <p class="text-15 fw-light mt-4 text-white">Selamat datang di Shafta E-Raport</p>
-                                <p class="text-lg fw-light mt-24 text-white">Semester 1 &mdash; 2025/2026</p>
+                                <p class="text-lg fw-light mt-24 text-white">Semester {{ $semesterActive->semester }} &mdash; {{ $semesterActive->nama }}</p>
                             </div>
                         </div>
                         <!-- <div class="col-sm-5 d-sm-block d-none">
@@ -41,22 +41,26 @@
                             <h4 class="mb-0">Rata - Rata Nilai Siswa</h4>
                             <div class="flex-align gap-16 flex-wrap">
                                 <div class="flex-align flex-wrap gap-16">
-                                    <div class="flex-align flex-wrap gap-8">
+                                    {{-- <div class="flex-align flex-wrap gap-8">
                                         <span class="w-8 h-8 rounded-circle bg-main-600"></span>
                                         <span class="text-13 text-gray-600">Nilai Umum</span>
                                     </div>
                                     <div class="flex-align flex-wrap gap-8">
                                         <span class="w-8 h-8 rounded-circle bg-main-two-600"></span>
                                         <span class="text-13 text-gray-600">Nilai Keshaftaan</span>
-                                    </div>
+                                    </div> --}}
                                 </div>
-                                <select class="form-select form-control text-13 px-8 pe-24 py-8 rounded-8 w-auto">
-                                    <option value="1">Yearly</option>
-                                    <option value="1">Monthly</option>
-                                    <option value="1">Weekly</option>
-                                    <option value="1">Today</option>
-                                </select>
                             </div>
+                        </div>
+
+                        <div id="chartLoading" class="text-center py-4">
+                            <div class="spinner-border text-main-600" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+
+                        <div id="noDataMessage" class="text-center py-4 d-none">
+                            <p class="text-gray-600 mb-0">Belum ada data nilai yang tersedia</p>
                         </div>
 
                         <div id="doubleLineChart" class="tooltip-style y-value-left"></div>
@@ -102,46 +106,18 @@
                             <h4 class="mb-0">Semester</h4>
                             <!-- <a href="assignment.html" class="text-13 fw-medium text-main-600 hover-text-decoration-underline">See All</a> -->
                         </div>
+                        @foreach ($semester as $item)
                         <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
                             <div class="flex-align flex-wrap gap-8">
                                 <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
                                 <div>
-                                    <h6 class="mb-0">Semester 1</h6>
-                                    <span class="text-13 text-gray-400">2023/2024</span>
+                                    <h6 class="mb-0">{{ $item->semester }}</h6>
+                                    <span class="text-13 text-gray-400">{{ $item->nama }} </span>
                                 </div>
                             </div>
                             <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
                         </div>
-                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                            <div class="flex-align flex-wrap gap-8">
-                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                                <div>
-                                    <h6 class="mb-0">Semester 2</h6>
-                                    <span class="text-13 text-gray-400">2023/2024</span>
-                                </div>
-                            </div>
-                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                        </div>
-                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                            <div class="flex-align flex-wrap gap-8">
-                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                                <div>
-                                    <h6 class="mb-0">Semester 1</h6>
-                                    <span class="text-13 text-gray-400">2024/2025</span>
-                                </div>
-                            </div>
-                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                        </div>
-                        <div class="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16">
-                            <div class="flex-align flex-wrap gap-8">
-                                <span class="text-main-600 bg-main-50 w-44 h-44 rounded-circle flex-center text-2xl flex-shrink-0"><i class="ph-fill ph-graduation-cap"></i></span>
-                                <div>
-                                    <h6 class="mb-0">Semester 2</h6>
-                                    <span class="text-13 text-gray-400">2024/2025</span>
-                                </div>
-                            </div>
-                            <a href="assignment.html" class="text-gray-900 hover-text-main-600"><i class="ph ph-caret-right"></i></a>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
                 <!-- Assignment End -->
@@ -276,14 +252,29 @@
 
             // =========================== Double Line Chart Start ===============================
             function createLineChart(chartId, chartColor) {
+                // Check if we have data to display
+                const nilaiUmum = @json($nilaiUmum);
+                const nilaiKeshaftaan = @json($nilaiKeshaftaan);
+                const kelasNames = @json($kelas->pluck('nama'));
+                console.log(kelasNames);
+
+                // Hide loading spinner
+                document.getElementById('chartLoading').classList.add('d-none');
+
+                // Show no data message if there's no data
+                if (!nilaiUmum.length && !nilaiKeshaftaan.length) {
+                    document.getElementById('noDataMessage').classList.remove('d-none');
+                    return;
+                }
+
                 var options = {
                     series: [{
-                            name: 'Study',
-                            data: [8, 15, 9, 20, 10, 33, 13, 22, 8, 17, 10, 15],
+                            name: 'Nilai Umum',
+                            data: nilaiUmum,
                         },
                         {
-                            name: 'Test',
-                            data: [8, 24, 18, 40, 18, 48, 22, 38, 18, 30, 20, 28],
+                            name: 'Nilai Keshaftaan',
+                            data: nilaiKeshaftaan,
                         },
                     ],
                     chart: {
@@ -291,10 +282,23 @@
                         width: '100%',
                         height: 300,
                         sparkline: {
-                            enabled: false // Remove whitespace
+                            enabled: false
                         },
                         toolbar: {
                             show: false
+                        },
+                        animations: {
+                            enabled: true,
+                            easing: 'easeinout',
+                            speed: 800,
+                            animateGradually: {
+                                enabled: true,
+                                delay: 150
+                            },
+                            dynamicAnimation: {
+                                enabled: true,
+                                speed: 350
+                            }
                         },
                         padding: {
                             left: 0,
@@ -303,22 +307,22 @@
                             bottom: 0
                         }
                     },
-                    colors: ['#3D7FF9', chartColor], // Set the color of the series
+                    colors: ['#3D7FF9', '#27CFA7'],
                     dataLabels: {
                         enabled: false,
                     },
                     stroke: {
                         curve: 'smooth',
-                        width: 1,
-                        colors: ["#3D7FF9", chartColor],
+                        width: 2,
+                        colors: ["#3D7FF9", "#27CFA7"],
                         lineCap: 'round',
                     },
                     fill: {
                         type: 'gradient',
                         gradient: {
                             shadeIntensity: 1,
-                            opacityFrom: 0.9, // Decrease this value to reduce opacity
-                            opacityTo: 0.2, // Decrease this value to reduce opacity
+                            opacityFrom: 0.7,
+                            opacityTo: 0.2,
                             stops: [0, 100]
                         }
                     },
@@ -337,14 +341,6 @@
                                 show: true
                             }
                         },
-                        row: {
-                            colors: undefined,
-                            opacity: 0.5
-                        },
-                        column: {
-                            colors: undefined,
-                            opacity: 0.5
-                        },
                         padding: {
                             top: 0,
                             right: 0,
@@ -352,9 +348,8 @@
                             left: 0
                         },
                     },
-                    // Customize the circle marker color on hover
                     markers: {
-                        colors: ["#3D7FF9", chartColor],
+                        colors: ["#3D7FF9", "#27CFA7"],
                         strokeWidth: 3,
                         size: 0,
                         hover: {
@@ -362,44 +357,73 @@
                         }
                     },
                     xaxis: {
+                        categories: kelasNames,
                         labels: {
+                            style: {
+                                fontSize: "12px",
+                                colors: "#666"
+                            },
+                            rotate: -45,
+                            rotateAlways: true
+                        },
+                        axisBorder: {
                             show: false
                         },
-                        categories: [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`],
-                        tooltip: {
-                            enabled: false,
-                        },
-                        labels: {
-                            formatter: function(value) {
-                                return value;
-                            },
-                            style: {
-                                fontSize: "14px"
-                            }
-                        },
+                        axisTicks: {
+                            show: false
+                        }
                     },
                     yaxis: {
+                        min: 0,
+                        max: 100,
+                        tickAmount: 5,
                         labels: {
                             formatter: function(value) {
                                 return value;
                             },
                             style: {
-                                fontSize: "14px"
+                                fontSize: "12px",
+                                colors: "#666"
                             }
-                        },
+                        }
                     },
                     tooltip: {
-                        x: {
-                            format: 'dd/MM/yy HH:mm'
+                        y: {
+                            formatter: function(value) {
+                                return value;
+                            }
                         },
+                        shared: true,
+                        intersect: false,
+                        x: {
+                            show: true
+                        }
                     },
                     legend: {
-                        show: false,
+                        show: true,
                         position: 'top',
                         horizontalAlign: 'right',
                         offsetX: -10,
-                        offsetY: -0
-                    }
+                        offsetY: -0,
+                        markers: {
+                            width: 12,
+                            height: 12,
+                            strokeWidth: 0,
+                            strokeColor: '#fff',
+                            radius: 12
+                        }
+                    },
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                height: 250
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
                 };
 
                 var chart = new ApexCharts(document.querySelector(`#${chartId}`), options);

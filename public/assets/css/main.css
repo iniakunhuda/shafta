@@ -231,6 +231,7 @@
     --font-4xl: 2.25rem;
     --font-5xl: 3rem;
     --font-6xl: 3.75rem;
+    --bs-nav-link-color: var(--main);
 }
 
 /* ========================= Variable Css End ======================== */
@@ -9836,4 +9837,106 @@ button:focus {
 .table-striped>tbody>tr:nth-of-type(odd)>* {
     --bs-table-color-type: #000 !important;
     --bs-table-bg-type: rgba(0,0,0, 0.05) !important;
+}
+
+.nav-tabs .nav-link.active {
+    border-color: hsl(var(--main)) !important;
+}
+
+.nav-link {
+    color: hsl(var(--main)) !important;
+}
+
+/* Calendar Event Indicators */
+.has-events {
+    position: relative;
+}
+
+.event-indicator {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: var(--main-600);
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Calendar Event Indicators */
+.has-events {
+    position: relative;
+    background-color: var(--main-50);
+    border-radius: 4px;
+}
+
+.event-indicator {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: var(--main-600);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Highlight for current date */
+.current-date {
+    background: var(--main-600);
+    color: #fff !important;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 2;
+}
+
+/* Highlight for event days */
+.has-events {
+    background-color: var(--main-50);
+    border-radius: 50%;
+    position: relative;
+    z-index: 1;
+}
+
+/* If today has events, keep the current-date style dominant */
+.current-date.has-events {
+    background: var(--main-600);
+    color: #fff !important;
+}
+
+/* Event indicator styling */
+.event-indicator {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: var(--main-600);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 3;
 }
