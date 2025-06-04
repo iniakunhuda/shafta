@@ -46,19 +46,19 @@ class KelasService
      *
      * @param array $data
      * @return Kelas
-     */ 
+     */
     public function create(array $data): Kelas
     {
         return Kelas::create($data);
     }
-    
+
     /**
      * Update kelas
      *
      * @param int $id
      * @param array $data
      * @return Kelas
-     */ 
+     */
     public function update(int $id, array $data): Kelas
     {
         $kelas = $this->getById($id);
@@ -71,10 +71,44 @@ class KelasService
      *
      * @param int $id
      * @return bool
-     */     
+     */
     public function delete(int $id): bool
     {
         $kelas = $this->getById($id);
         return $kelas->delete();
+    }
+
+
+    /**
+     * Get all kelas by tahun ajaran id
+     *
+     * @param int $tahunAjaranId
+     * @return Collection
+     */
+    public function getAllByTahunAjaranId(int $tahunAjaranId): Collection
+    {
+        return Kelas::where('id_tahunajaran', $tahunAjaranId)->get();
+    }
+
+
+    /**
+     * Get all kelas with filter
+     *
+     * @param array $filters
+     * @return Collection
+     */
+    public function getAllWithFilter(array $filters = []): Collection
+    {
+        $query = Kelas::query();
+
+        if (isset($filters['id_tahunajaran'])) {
+            $query->where('id_tahunajaran', $filters['id_tahunajaran']);
+        }
+
+        if (isset($filters['jenjang'])) {
+            $query->where('jenjang', $filters['jenjang']);
+        }
+
+        return $query->get();
     }
 }

@@ -55,7 +55,13 @@ Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->group(fun
     Route::resource('kelas', KelasController::class)->names('admin.kelas');
 
     Route::controller(UploadNilaiRaportController::class)->prefix('upload-nilai')->group(function () {
-        Route::get('/', 'view')->name('admin.upload-nilai-raport.step1');
+        Route::get('/', 'step1')->name('admin.upload-nilai-raport.step1');
+        Route::post('upload-step1', 'handleUploadStep1')->name('admin.upload-nilai-raport.step1.handleUpload');
+        Route::get('step2', 'step2')->name('admin.upload-nilai-raport.step2');
+        Route::post('step2-save', 'handleStep2Save')->name('admin.upload-nilai-raport.step2.save');
+        Route::get('step3', 'step3')->name('admin.upload-nilai-raport.step3');
+        Route::post('step3-save', 'handleStep3Save')->name('admin.upload-nilai-raport.step3.save');
+        Route::get('clear-session', 'clearSession')->name('admin.upload-nilai-raport.clear-session');
     });
 
 });
