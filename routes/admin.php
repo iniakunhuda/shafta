@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\PengaturanWebsiteController;
 use App\Http\Controllers\Admin\TahunAjaranController;
 use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\UploadNilaiRaportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Superadmin\UserAdminController;
@@ -18,7 +19,7 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
     // User Management
     Route::resource('user/siswa', UserSiswaController::class)->names('admin.user_siswa');
     Route::put('user/siswa/{user}/toggle-status', [UserSiswaController::class, 'toggleStatus'])->name('admin.user_siswa.toggle-status');
-    
+
     Route::resource('user/admin', UserAdminController::class)->names('admin.user_admin');
     Route::put('user/admin/{user}/toggle-status', [UserAdminController::class, 'toggleStatus'])->name('admin.user_admin.toggle-status');
 
@@ -52,4 +53,9 @@ Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->group(fun
     Route::put('siswa/{id}/toggle-active',[SiswaController::class, 'toggleActive'])
         ->name('admin.siswa.toggle-active');
     Route::resource('kelas', KelasController::class)->names('admin.kelas');
+
+    Route::controller(UploadNilaiRaportController::class)->prefix('upload-nilai')->group(function () {
+        Route::get('/', 'view')->name('admin.upload-nilai-raport.step1');
+    });
+
 });

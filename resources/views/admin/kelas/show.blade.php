@@ -43,6 +43,12 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
+                            <span class="text-gray-400 mb-2 fw-normal">Jenjang</span>
+                            <span class="h5 fw-semibold">{{ $kelas->jenjang }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex flex-column">
                             <span class="text-gray-400 mb-2 fw-normal">Nama Kelas</span>
                             <span class="h5 fw-semibold">{{ $kelas->nama }}</span>
                         </div>

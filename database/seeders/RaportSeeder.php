@@ -66,6 +66,7 @@ class RaportSeeder extends Seeder
                 'maksimum' => 30,
                 'wali_kelas_nama' => 'Wali Kelas ' . $k,
                 'id_tahunajaran' => $tahunAjaran1->id,
+                'jenjang' => 'SMA',
             ]);
 
             $kelasModels2[$k] = Kelas::create([
@@ -73,6 +74,7 @@ class RaportSeeder extends Seeder
                 'maksimum' => 30,
                 'wali_kelas_nama' => 'Wali Kelas ' . $k,
                 'id_tahunajaran' => $tahunAjaran2->id,
+                'jenjang' => 'SMA',
             ]);
         }
 
@@ -753,7 +755,7 @@ class RaportSeeder extends Seeder
             foreach ($studentData['nilai'] as $kode => $nilai) {
                 // For Tahun Ajaran 2 (2024/2025), show improvement or decline based on subject
                 $variation = 0;
-                
+
                 // Add more variation based on subject type
                 switch ($kode) {
                     case 'PAI':

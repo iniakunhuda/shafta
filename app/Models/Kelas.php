@@ -26,6 +26,7 @@ class Kelas extends Model
         'maksimum',
         'wali_kelas_nama',
         'id_tahunajaran',
+        'jenjang'
     ];
 
     /**

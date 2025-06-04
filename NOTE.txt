@@ -1,0 +1,7 @@
+Todo:
+
+[v] Kelas tambah column jenjang (smp/sma)
+[ ] Siswa harus cantol kelas & tahun ajaran
+[ ] Ada config untuk jenjang smp/sma
+
+

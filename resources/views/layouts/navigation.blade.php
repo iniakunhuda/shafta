@@ -58,10 +58,10 @@
                         <span class="text">Nilai Raport (Proses)</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
-                    <a href="{{ route('dashboard') }}" class="sidebar-menu__link">
+                <li class="sidebar-menu__item {{ request()->is('admin/upload-nilai*') ? 'activePage' : '' }}"">
+                    <a href="{{ route('admin.upload-nilai-raport.step1') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-upload"></i></span>
-                        <span class="text">Upload Nilai Raport (Proses)</span>
+                        <span class="text">Upload Nilai Raport</span>
                     </a>
                 </li>
                 <li class="sidebar-menu__item {{ request()->is('admin/kalender*') ? 'activePage' : '' }}"">
