@@ -289,6 +289,7 @@
                                     <p class="mb-1"><strong>Tahun Ajaran:</strong> {{ $tahunAjaran->nama ?? 'N/A' }}</p>
                                     <p class="mb-1"><strong>Kelas:</strong> {{ $kelas->nama ?? 'N/A' }}</p>
                                     <p class="mb-0"><strong>Total Siswa:</strong> {{ count($students_data ?? []) }} siswa</p>
+                                    <p class="mb-1"><strong>Jenis Dokumen:</strong> {{ request()->jenis_dokumen ?? session('upload_data.jenis_dokumen') }}</p>
                                 </div>
                                 <div class="alert alert-warning">
                                     <h5><i class="ph ph-info-circle"></i> Penting!</h5>
@@ -321,7 +322,7 @@
                                     </div>
                                     <div class="validation-item warning">
                                         <i class="ph ph-warning-circle"></i>
-                                        <span>Nilai Rendah (50): <strong id="lowScores">0</strong></span>
+                                        <span>Nilai Rendah (<50): <strong id="lowScores">0</strong></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -412,23 +413,23 @@
 
                                                         if (empty($score)) {
                                                             $cellClass .= ' warning-cell';
-                                                            $icon = '<i class="ph ph-warning-circle validation-icon text-warning" title="Nilai kosong"></i>';
+                                                            $icon = '<i class="ph ph-warning-circle validation-icon text-warning"></i>';
                                                             $title = 'Nilai kosong';
                                                         } elseif (!is_numeric($score)) {
                                                             $cellClass .= ' invalid-cell';
-                                                            $icon = '<i class="ph ph-x-circle validation-icon text-danger" title="Nilai tidak valid"></i>';
+                                                            $icon = '<i class="ph ph-x-circle validation-icon text-danger"></i>';
                                                             $title = 'Nilai tidak valid';
                                                         } elseif ($score < 0 || $score > 100) {
                                                             $cellClass .= ' invalid-cell';
-                                                            $icon = '<i class="ph ph-x-circle validation-icon text-danger" title="Nilai harus 0-100"></i>';
+                                                            $icon = '<i class="ph ph-x-circle validation-icon text-danger"></i>';
                                                             $title = 'Nilai harus 0-100';
                                                         } elseif ($score < 50) {
                                                             $cellClass .= ' warning-cell';
-                                                            $icon = '<i class="ph ph-warning-circle validation-icon text-warning" title="Nilai di bawah KKM"></i>';
+                                                            $icon = '<i class="ph ph-warning-circle validation-icon text-warning"></i>';
                                                             $title = 'Nilai di bawah KKM';
                                                         } else {
                                                             $cellClass .= ' valid-cell';
-                                                            $icon = '<i class="ph ph-check-circle validation-icon text-success" title="Nilai valid"></i>';
+                                                            $icon = '<i class="ph ph-check-circle validation-icon text-success"></i>';
                                                             $title = 'Nilai valid';
                                                         }
                                                     @endphp
@@ -502,7 +503,7 @@
 
                             <!-- Action Buttons -->
                             <div class="action-buttons">
-                                <button type="button" class="btn btn-secondary rounded-pill py-9 px-20 me-3" onclick="window.location.href='{{ route('admin.upload-nilai-raport.step2') }}?jenjang={{ request()->jenjang }}&tahun_ajaran={{ request()->tahun_ajaran }}&kelas={{ request()->kelas }}'">
+                                <button type="button" class="btn btn-secondary rounded-pill py-9 px-20 me-3" onclick="window.location.href='{{ route('admin.upload-nilai-raport.step2') }}?jenjang={{ request()->jenjang }}&tahun_ajaran={{ request()->tahun_ajaran }}&kelas={{ request()->kelas }}&jenis_dokumen={{ request()->jenis_dokumen }}'">
                                     <i class="ph ph-arrow-left me-2"></i>Kembali ke Koreksi
                                 </button>
                                 <button type="submit" class="btn btn-success rounded-pill py-9 px-20 me-3" id="saveButton">

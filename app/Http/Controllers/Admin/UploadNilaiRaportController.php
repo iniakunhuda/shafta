@@ -40,6 +40,7 @@ class UploadNilaiRaportController extends Controller
             'tahun_ajaran' => 'required',
             'kelas' => 'required',
             'jenjang' => 'required|in:SMP,SMA',
+            'jenis_dokumen' => 'string',
         ]);
 
         // Get data from session
@@ -68,7 +69,7 @@ class UploadNilaiRaportController extends Controller
         ));
     }
 
-    public function handleUploadStep1(Request $request)
+    public function handleStep1Save(Request $request)
     {
         $request->validate([
             'tahun_ajaran' => 'required',
@@ -116,7 +117,8 @@ class UploadNilaiRaportController extends Controller
                 return redirect()->route('admin.upload-nilai-raport.step2', [
                     'jenjang' => $request->jenjang,
                     'tahun_ajaran' => $request->tahun_ajaran,
-                    'kelas' => $request->kelas
+                    'kelas' => $request->kelas,
+                    'jenis_dokumen' => $request->jenis_dokumen
                 ])->with('success', 'File berhasil diupload. Silakan periksa dan koreksi data.');
             }
 
@@ -125,7 +127,8 @@ class UploadNilaiRaportController extends Controller
             return redirect()->route('admin.upload-nilai-raport.step1', [
                 'jenjang' => $request->jenjang,
                 'tahuan_ajaran' => $request->tahun_ajaran,
-                'kelas' => $request->kelas
+                'kelas' => $request->kelas,
+                'jenis_dokumen' => $request->jenis_dokumen
             ])->with('error', 'Error processing file: ' . $e->getMessage());
         }
 
@@ -150,7 +153,8 @@ class UploadNilaiRaportController extends Controller
         return redirect()->route('admin.upload-nilai-raport.step2', [
             'jenjang' => $request->jenjang,
             'tahun_ajaran' => $request->tahun_ajaran,
-            'kelas' => $request->kelas
+            'kelas' => $request->kelas,
+            'jenis_dokumen' => $request->jenis_dokumen
         ])->with('success', 'Data berhasil disimpan. Data siap untuk validasi.');
     }
 
@@ -219,11 +223,6 @@ class UploadNilaiRaportController extends Controller
                         ->where('id_tahun_ajaran', $request->tahun_ajaran)
                         ->where('id_kelas', $request->kelas);
                 })
-                ->delete();
-
-            \DB::table('raport_hafalan')
-                ->where('id_tahun_ajaran', $request->tahun_ajaran)
-                ->where('id_kelas', $request->kelas)
                 ->delete();
 
             \DB::table('raport')
@@ -317,12 +316,28 @@ class UploadNilaiRaportController extends Controller
                     if (!empty($student['eskul'])) {
                         foreach ($student['eskul'] as $eskul_name => $eskul_score) {
                             if (!empty(trim($eskul_score)) && is_numeric($eskul_score)) {
-                                \DB::table('raport_hafalan')->insert([
-                                    'id_tahun_ajaran' => $request->tahun_ajaran,
-                                    'id_kelas' => $request->kelas,
-                                    'id_siswa' => $siswa_id,
-                                    'judul' => $eskul_name,
-                                    'nilai' => (float)$eskul_score,
+                                // Find or create pelajaran record
+                                $eskul_detail = \DB::table('pelajaran')
+                                    ->where('judul', $eskul_name)
+                                    ->first();
+
+                                if (!$eskul_detail) {
+                                    $eskul_detail_id = \DB::table('pelajaran')->insertGetId([
+                                        'judul' => $eskul_name,
+                                        'kategori' => 'umum',
+                                        'kategori_matkul' => $this->getCategoryBySubject($eskul_name),
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ]);
+                                } else {
+                                    $eskul_detail_id = $eskul_detail->id;
+                                }
+
+                                // Insert score
+                                \DB::table('raport_nilai')->insert([
+                                    'id_raport' => $raport_id,
+                                    'id_pelajaran' => $eskul_detail_id,
+                                    'nilai' => (float) $eskul_score,
                                     'nilai_huruf' => $this->convertToGrade($eskul_score),
                                     'created_at' => now(),
                                     'updated_at' => now(),
@@ -365,7 +380,8 @@ class UploadNilaiRaportController extends Controller
             return redirect()->route('admin.upload-nilai-raport.step3', [
                 'jenjang' => $request->jenjang,
                 'tahun_ajaran' => $request->tahun_ajaran,
-                'kelas' => $request->kelas
+                'kelas' => $request->kelas,
+                'jenis_dokumen' => $request->jenis_dokumen
             ])->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
         }
     }

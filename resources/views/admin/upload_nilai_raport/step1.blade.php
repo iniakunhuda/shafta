@@ -138,7 +138,7 @@
                                         <label class="mb-8 fw-normal">Pilih Kelas<span class="text-danger">*</span></label>
                                         <div class="position-relative">
                                             <select class="form-control py-11 @error('kelas') is-invalid @enderror" name="kelas" required onchange="window.location.href='{{ route('admin.upload-nilai-raport.step1') }}?jenjang={{ request()->jenjang }}&tahun_ajaran={{ request()->tahun_ajaran }}&kelas=' + this.value">
-                                                @if(count($kelas) == 0)
+                                                @if(!isset(request()->tahun_ajaran))
                                                     <option value="" disabled selected>Pilih Tahun Ajaran terlebih dahulu</option>
                                                 @else
                                                     <option value="">Pilih Kelas</option>
@@ -153,11 +153,15 @@
                                         <br>
                                         <label class="mb-8 fw-normal">Pilih Jenis Dokumen<span class="text-danger">*</span></label>
                                         <div class="position-relative">
-                                            <select class="form-control py-11 @error('jenis_dokumen') is-invalid @enderror" name="jenis_dokumen" required>
-                                                <option value="">Pilih Jenis Dokumen</option>
-                                                <option value="umum">Nilai Umum</option>
-                                                <option value="shafta">Nilai Keshaftaan</option>
-                                                <option value="sikap">Nilai Sikap</option>
+                                            <select class="form-control py-11 @error('jenis_dokumen') is-invalid @enderror" name="jenis_dokumen" required onchange="window.location.href='{{ route('admin.upload-nilai-raport.step1') }}?jenjang={{ request()->jenjang }}&tahun_ajaran={{ request()->tahun_ajaran }}&kelas={{ request()->kelas }}&jenis_dokumen=' + this.value">
+                                                @if (!isset(request()->kelas))
+                                                    <option value="" disabled selected>Pilih Kelas terlebih dahulu</option>
+                                                @else
+                                                    <option value="">Pilih Jenis Dokumen</option>
+                                                    <option value="umum" {{ request()->jenis_dokumen == 'umum' ? 'selected' : '' }}>Nilai Umum</option>
+                                                    <option value="shafta" {{ request()->jenis_dokumen == 'shafta' ? 'selected' : '' }}>Nilai Keshaftaan</option>
+                                                    <option value="sikap" {{ request()->jenis_dokumen == 'sikap' ? 'selected' : '' }}>Nilai Sikap</option>
+                                                @endif
                                             </select>
                                         </div>
                                     </div>

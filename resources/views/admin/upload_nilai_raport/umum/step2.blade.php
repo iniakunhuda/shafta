@@ -245,7 +245,8 @@
                                     <p class="mb-1"><strong>Jenjang:</strong> {{ request()->jenjang ?? session('upload_data.jenjang') }}</p>
                                     <p class="mb-1"><strong>Tahun Ajaran:</strong> {{ $tahunAjaran->nama ?? 'N/A' }}</p>
                                     <p class="mb-1"><strong>Kelas:</strong> {{ $kelas->nama ?? 'N/A' }}</p>
-                                    <p class="mb-0"><strong>Total Siswa:</strong> {{ count($students_data ?? []) }} siswa</p>
+                                    <p class="mb-1"><strong>Total Siswa:</strong> {{ count($students_data ?? []) }} siswa</p>
+                                    <p class="mb-1"><strong>Jenis Dokumen:</strong> {{ request()->jenis_dokumen ?? session('upload_data.jenis_dokumen') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -257,6 +258,7 @@
                             <input type="hidden" name="jenjang" value="{{ request()->jenjang }}">
                             <input type="hidden" name="tahun_ajaran" value="{{ request()->tahun_ajaran }}">
                             <input type="hidden" name="kelas" value="{{ request()->kelas }}">
+                            <input type="hidden" name="jenis_dokumen" value="{{ request()->jenis_dokumen }}">
 
                             <div class="table-container">
                                 <table class="table table-bordered table-fixed">
@@ -409,7 +411,8 @@
                 window.location.href = "{{ route('admin.upload-nilai-raport.step3') }}?" +
                                      "jenjang={{ request()->jenjang }}&" +
                                      "tahun_ajaran={{ request()->tahun_ajaran }}&" +
-                                     "kelas={{ request()->kelas }}";
+                                     "kelas={{ request()->kelas }}&" +
+                                     "jenis_dokumen={{ request()->jenis_dokumen }}";
             }
 
             // Auto-save functionality (optional)
