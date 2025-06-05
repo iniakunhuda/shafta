@@ -88,7 +88,7 @@
 
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane" type="button" role="tab" aria-controls="upload-tab-pane" aria-selected="true">Upload File Excel</button>
+                            <button class="nav-link active btn-main" style="color:white !important" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane" type="button" role="tab" aria-controls="upload-tab-pane" aria-selected="true">Upload File Excel</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link " id="nilai-umum-tab">Koreksi Data</button>

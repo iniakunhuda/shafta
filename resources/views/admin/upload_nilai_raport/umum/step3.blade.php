@@ -267,13 +267,13 @@
                 <!-- Navigation Tabs -->
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" onclick="window.location.href='{{ route('admin.upload-nilai-raport.step1') }}'">Upload File Excel</button>
+                        <button class="nav-link">Upload File Excel</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" onclick="window.location.href='{{ route('admin.upload-nilai-raport.step2') }}?jenjang={{ request()->jenjang }}&tahun_ajaran={{ request()->tahun_ajaran }}&kelas={{ request()->kelas }}'">Koreksi Data</button>
+                        <button class="nav-link">Koreksi Data</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="validasi-tab">Validasi Nilai</button>
+                        <button class="nav-link active btn-main" style="color:white !important" id="validasi-tab">Validasi Nilai</button>
                     </li>
                 </ul>
 

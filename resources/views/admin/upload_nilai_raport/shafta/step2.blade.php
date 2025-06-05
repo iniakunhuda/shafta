@@ -5,7 +5,7 @@
             <li> <span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span> </li>
             <li><a href="{{ route('admin.upload-nilai-raport.step1') }}" class="text-gray-200 fw-normal text-15 hover-text-main-600">Upload Nilai Raport</a></li>
             <li> <span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span> </li>
-            <li><span class="text-main-600 fw-normal text-15">{{ __('Koreksi Data') }}</span></li>
+            <li><span class="text-main-600 fw-normal text-15">{{ __('Koreksi Data Shafta') }}</span></li>
         </ul>
     </x-slot>
 
@@ -63,7 +63,7 @@
                 background-color: #f8f9fa;
                 font-weight: bold;
                 position: sticky;
-                left: 0;
+                left: -0.3px;
                 z-index: 10;
                 white-space: normal;
             }
@@ -90,37 +90,62 @@
                 padding: 15px 10px !important;
                 font-size: 14px;
             }
-            .mata-pelajaran-header {
-                background-color: #17a2b8 !important;
-                color: white !important;
-                /* writing-mode: vertical-rl; */
+
+            /* Parent and Child Header Styling */
+            .parent-header {
+                /**writing-mode: vertical-rl;**/
                 text-orientation: mixed;
                 font-size: 11px;
                 padding: 8px 6px !important;
-                min-width: 60px;
-                max-width: 80px;
+                min-width: 80px;
+                max-width: 100px;
                 height: 120px;
                 white-space: normal;
+                font-weight: bold;
             }
-            .ketidakhadiran-header {
+
+            .child-header {
+                /**writing-mode: vertical-rl;**/
+                text-orientation: mixed;
+                font-size: 10px;
+                padding: 6px 4px !important;
+                min-width: 70px;
+                max-width: 90px;
+                height: 80px;
+                white-space: normal;
+                font-weight: normal;
+            }
+
+            /* Keshaftaan parent headers that span multiple columns */
+            .keshaftaan-parent-span {
+                /**writing-mode: horizontal-tb !important;**/
+                text-orientation: initial !important;
+                height: 40px !important;
+                min-height: 40px !important;
+                font-size: 12px !important;
+                padding: 8px 10px !important;
+                text-align: center !important;
+                vertical-align: middle !important;
+            }
+
+            /* Shafta specific colors */
+            .pengembangan-header {
                 background-color: #28a745 !important;
                 color: white !important;
-                font-size: 11px;
-                /* writing-mode: vertical-rl; */
-                min-width: 60px;
-                padding: 8px 6px !important;
-                height: 120px;
             }
-            .eskul-header {
+            .ibadah-header {
+                background-color: #dc3545 !important;
+                color: white !important;
+            }
+            .keshaftaan-header {
                 background-color: #ffc107 !important;
                 color: black !important;
-                /* writing-mode: vertical-rl; */
-                text-orientation: mixed;
-                font-size: 11px;
-                padding: 8px 6px !important;
-                min-width: 60px;
-                height: 120px;
             }
+            .keshaftaan-child-header {
+                background-color: #f6d466 !important;
+                color: black !important;
+            }
+
             .student-cell {
                 min-width: 150px;
                 max-width: 250px;
@@ -143,8 +168,8 @@
                 padding: 8px 6px !important;
             }
             .score-cell {
-                min-width: 60px;
-                max-width: 80px;
+                min-width: 80px;
+                max-width: 100px;
                 padding: 4px 2px !important;
             }
             .action-buttons {
@@ -175,6 +200,17 @@
                 padding: 4px 6px;
             }
 
+            /* Section-specific styling */
+            .pengembangan-section {
+                background-color: #e8f5e8 !important;
+            }
+            .ibadah-section {
+                background-color: #ffebee !important;
+            }
+            .keshaftaan-section {
+                background-color: #fff8e1 !important;
+            }
+
             /* Responsive adjustments */
             @media (max-width: 768px) {
                 .table-fixed th,
@@ -188,11 +224,10 @@
                     font-size: 11px;
                 }
 
-                .mata-pelajaran-header,
-                .ketidakhadiran-header,
-                .eskul-header {
+                .parent-header,
+                .child-header {
                     font-size: 10px;
-                    min-width: 50px;
+                    min-width: 60px;
                 }
             }
         </style>
@@ -202,7 +237,7 @@
         <div class="card">
             <div class="card-header border-bottom border-gray-100 flex-align gap-8">
                 <h5 class="mb-0">Koreksi Data Nilai Raport</h5>
-                <button type="button" class="text-main-600 text-md d-flex" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Koreksi dan validasi data sebelum menyimpan">
+                <button type="button" class="text-main-600 text-md d-flex" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Koreksi dan validasi data nilai shafta sebelum menyimpan">
                     <i class="ph-fill ph-question"></i>
                 </button>
             </div>
@@ -241,12 +276,12 @@
                         <div class="row mb-4">
                             <div class="col-md-12">
                                 <div class="alert alert-info">
-                                    <h6 class="mb-2"><i class="ph ph-info"></i> Informasi Data</h6>
+                                    <h6 class="mb-2"><i class="ph ph-info"></i> Informasi Data Shafta</h6>
                                     <p class="mb-1"><strong>Jenjang:</strong> {{ request()->jenjang ?? session('upload_data.jenjang') }}</p>
                                     <p class="mb-1"><strong>Tahun Ajaran:</strong> {{ $tahunAjaran->nama ?? 'N/A' }}</p>
                                     <p class="mb-1"><strong>Kelas:</strong> {{ $kelas->nama ?? 'N/A' }}</p>
                                     <p class="mb-1"><strong>Total Siswa:</strong> {{ count($students_data ?? []) }} siswa</p>
-                                    <p class="mb-1"><strong>Jenis Dokumen:</strong> {{ request()->jenis_dokumen ?? session('upload_data.jenis_dokumen') }}</p>
+                                    <p class="mb-1"><strong>Jenis Dokumen:</strong> Shafta</p>
                                 </div>
                             </div>
                         </div>
@@ -263,32 +298,72 @@
                             <div class="table-container">
                                 <table class="table table-bordered table-fixed">
                                     <thead>
-                                        <!-- First Header Row - Section Names -->
+                                        <!-- First Header Row - Main Section Names -->
                                         <tr>
-                                            <th rowspan="2" class="student-info number-cell">NO</th>
-                                            <th rowspan="2" class="student-info nisn-cell">NISN</th>
-                                            <th rowspan="2" class="student-info nis-cell">NIS</th>
-                                            <th rowspan="2" class="student-info student-cell">NAMA SISWA</th>
-                                            <th colspan="{{ count($mata_pelajaran ?? []) }}" class="section-header">MATA PELAJARAN</th>
-                                            <th colspan="3" class="section-header">Ketidakhadiran</th>
-                                            <th colspan="{{ count(array_filter($eskul ?? [])) }}" class="section-header">Ekstrakurikuler</th>
+                                            <th rowspan="4" class="student-info number-cell">NO</th>
+                                            <th rowspan="4" class="student-info nisn-cell">NISN</th>
+                                            <th rowspan="4" class="student-info nis-cell">NIS</th>
+                                            <th rowspan="4" class="student-info student-cell">NAMA SISWA</th>
+
+                                            @if(isset($pengembangan_bidang_studi) && count($pengembangan_bidang_studi) > 0)
+                                                <th colspan="{{ count($pengembangan_bidang_studi) }}" class="section-header" style="background-color: #28a745 !important;">PENGEMBANGAN BIDANG STUDI</th>
+                                            @endif
+
+                                            @if(isset($ibadah) && count($ibadah) > 0)
+                                                <th colspan="{{ count($ibadah) }}" class="section-header" style="background-color: #dc3545 !important; color: white !important;">IBADAH</th>
+                                            @endif
+
+                                            @if(isset($keshaftaan) && count($keshaftaan) > 0)
+                                                @php
+                                                    $keshaftaan_total_cols = 0;
+                                                    foreach($keshaftaan as $item) {
+                                                        if(isset($item['child']) && count($item['child']) > 0) {
+                                                            $keshaftaan_total_cols += count($item['child']); // Only child columns for items with children
+                                                        } else {
+                                                            $keshaftaan_total_cols++; // Parent column for items without children
+                                                        }
+                                                    }
+                                                @endphp
+                                                <th colspan="{{ $keshaftaan_total_cols }}" class="section-header" style="background-color: #ffc107 !important;color: black !important">KESHAFTAAN</th>
+                                            @endif
                                         </tr>
-                                        <!-- Second Header Row - Subject Names -->
+
+                                        <!-- Second Header Row - Keshaftaan Parent Categories -->
                                         <tr>
-                                            @if(isset($mata_pelajaran))
-                                                @foreach($mata_pelajaran as $subject)
-                                                    <th class="mata-pelajaran-header">{{ $subject }}</th>
+                                            <!-- Pengembangan Bidang Studi - No additional row needed -->
+                                            @if(isset($pengembangan_bidang_studi))
+                                                @foreach($pengembangan_bidang_studi as $subject)
+                                                    <th rowspan="3" class="pengembangan-header parent-header">{{ $subject['name'] }}</th>
                                                 @endforeach
                                             @endif
 
-                                            <th class="ketidakhadiran-header">Sakit</th>
-                                            <th class="ketidakhadiran-header">Ijin</th>
-                                            <th class="ketidakhadiran-header">Alpha</th>
+                                            <!-- Ibadah - No additional row needed -->
+                                            @if(isset($ibadah))
+                                                @foreach($ibadah as $subject)
+                                                    <th rowspan="3" class="ibadah-header parent-header">{{ $subject['name'] }}</th>
+                                                @endforeach
+                                            @endif
 
-                                            @if(isset($eskul))
-                                                @foreach($eskul as $activity)
-                                                    @if(!empty(trim($activity)))
-                                                        <th class="eskul-header">{{ $activity }}</th>
+                                            <!-- Keshaftaan Parent Categories -->
+                                            @if(isset($keshaftaan))
+                                                @foreach($keshaftaan as $subject)
+                                                    @if(isset($subject['child']) && count($subject['child']) > 0)
+                                                        <th colspan="{{ count($subject['child']) }}" class="keshaftaan-header parent-header" style="writing-mode: horizontal-tb; height: auto; min-height: 40px;">{{ $subject['name'] }}</th>
+                                                    @else
+                                                        <th rowspan="3" class="keshaftaan-header parent-header">{{ $subject['name'] }}</th>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </tr>
+
+                                        <!-- Third Header Row - Child Categories (only for Keshaftaan with children) -->
+                                        <tr>
+                                            @if(isset($keshaftaan))
+                                                @foreach($keshaftaan as $subject)
+                                                    @if(isset($subject['child']) && count($subject['child']) > 0)
+                                                        @foreach($subject['child'] as $child)
+                                                            <th class="keshaftaan-child-header child-header">{{ $child['name'] }}</th>
+                                                        @endforeach
                                                     @endif
                                                 @endforeach
                                             @endif
@@ -317,52 +392,54 @@
                                                        class="form-control form-control-sm">
                                             </td>
 
-                                            <!-- Mata Pelajaran Scores -->
-                                            @if(isset($mata_pelajaran))
-                                                @foreach($mata_pelajaran as $subject)
-                                                    <td class="editable-cell score-cell">
-                                                        <input type="number"
-                                                               name="students[{{ $index }}][mata_pelajaran][{{ $subject }}]"
-                                                               value="{{ $student['mata_pelajaran'][$subject] ?? '' }}"
+                                            <!-- Pengembangan Bidang Studi Scores -->
+                                            @if(isset($pengembangan_bidang_studi))
+                                                @foreach($pengembangan_bidang_studi as $subject)
+                                                    <td class="editable-cell score-cell pengembangan-section">
+                                                        <input type="text"
+                                                               name="students[{{ $index }}][pengembangan_bidang_studi][{{ $subject['name'] }}]"
+                                                               value="{{ $student['pengembangan_bidang_studi'][$subject['name']] ?? '' }}"
                                                                class="form-control form-control-sm score-input"
-                                                               min="0" max="100">
+                                                               placeholder="-">
                                                     </td>
                                                 @endforeach
                                             @endif
 
-                                            <!-- Ketidakhadiran -->
-                                            <td class="editable-cell score-cell">
-                                                <input type="number"
-                                                       name="students[{{ $index }}][ketidakhadiran][sakit]"
-                                                       value="{{ $student['ketidakhadiran']['sakit'] ?? 0 }}"
-                                                       class="form-control form-control-sm score-input"
-                                                       min="0">
-                                            </td>
-                                            <td class="editable-cell score-cell">
-                                                <input type="number"
-                                                       name="students[{{ $index }}][ketidakhadiran][izin]"
-                                                       value="{{ $student['ketidakhadiran']['izin'] ?? 0 }}"
-                                                       class="form-control form-control-sm score-input"
-                                                       min="0">
-                                            </td>
-                                            <td class="editable-cell score-cell">
-                                                <input type="number"
-                                                       name="students[{{ $index }}][ketidakhadiran][alpha]"
-                                                       value="{{ $student['ketidakhadiran']['alpha'] ?? 0 }}"
-                                                       class="form-control form-control-sm score-input"
-                                                       min="0">
-                                            </td>
+                                            <!-- Ibadah Scores -->
+                                            @if(isset($ibadah))
+                                                @foreach($ibadah as $subject)
+                                                    <td class="editable-cell score-cell ibadah-section">
+                                                        <input type="text"
+                                                               name="students[{{ $index }}][ibadah][{{ $subject['name'] }}]"
+                                                               value="{{ $student['ibadah'][$subject['name']] ?? '' }}"
+                                                               class="form-control form-control-sm score-input"
+                                                               placeholder="-">
+                                                    </td>
+                                                @endforeach
+                                            @endif
 
-                                            <!-- Ekstrakurikuler -->
-                                            @if(isset($eskul))
-                                                @foreach($eskul as $activity)
-                                                    @if(!empty(trim($activity)))
-                                                        <td class="editable-cell score-cell">
-                                                            <input type="number"
-                                                                   name="students[{{ $index }}][eskul][{{ $activity }}]"
-                                                                   value="{{ $student['eskul'][$activity] ?? '' }}"
+                                            <!-- Keshaftaan Scores -->
+                                            @if(isset($keshaftaan))
+                                                @foreach($keshaftaan as $subject)
+                                                    @if(isset($subject['child']) && count($subject['child']) > 0)
+                                                        <!-- Only show child scores for items with children -->
+                                                        @foreach($subject['child'] as $child)
+                                                            <td class="editable-cell score-cell keshaftaan-section">
+                                                                <input type="text"
+                                                                       name="students[{{ $index }}][keshaftaan][{{ $child['name'] }}]"
+                                                                       value="{{ $student['keshaftaan'][$child['name']] ?? '' }}"
+                                                                       class="form-control form-control-sm score-input"
+                                                                       placeholder="-">
+                                                            </td>
+                                                        @endforeach
+                                                    @else
+                                                        <!-- Show parent score for items without children -->
+                                                        <td class="editable-cell score-cell keshaftaan-section">
+                                                            <input type="text"
+                                                                   name="students[{{ $index }}][keshaftaan][{{ $subject['name'] }}]"
+                                                                   value="{{ $student['keshaftaan'][$subject['name']] ?? '' }}"
                                                                    class="form-control form-control-sm score-input"
-                                                                   min="0" max="100">
+                                                                   placeholder="-">
                                                         </td>
                                                     @endif
                                                 @endforeach
@@ -405,8 +482,9 @@
     <x-slot name="scripts">
         <script>
             function proceedToValidation() {
-                // Save current form data first
+                // Save current form data first (optional auto-save)
                 const formData = new FormData(document.getElementById('correctionForm'));
+
                 // Redirect to validation step
                 window.location.href = "{{ route('admin.upload-nilai-raport.step3') }}?" +
                                      "jenjang={{ request()->jenjang }}&" +
@@ -415,9 +493,9 @@
                                      "jenis_dokumen={{ request()->jenis_dokumen }}";
             }
 
-            // Auto-save functionality (optional)
+            // Auto-save functionality and visual feedback
             document.addEventListener('DOMContentLoaded', function() {
-                const inputs = document.querySelectorAll('input[type="number"], input[type="text"]');
+                const inputs = document.querySelectorAll('input[type="text"]');
 
                 inputs.forEach(input => {
                     input.addEventListener('change', function() {
@@ -434,20 +512,77 @@
                 editableCells.forEach(cell => {
                     cell.setAttribute('title', 'Klik untuk mengedit nilai');
                 });
+
+                // Section-based color coding for better UX
+                const pengembanganCells = document.querySelectorAll('.pengembangan-section');
+                const ibadahCells = document.querySelectorAll('.ibadah-section');
+                const keshaftaanCells = document.querySelectorAll('.keshaftaan-section');
+
+                pengembanganCells.forEach(cell => {
+                    const input = cell.querySelector('input');
+                    if (input) {
+                        input.addEventListener('focus', function() {
+                            this.parentElement.style.backgroundColor = '#d4edda';
+                        });
+                        input.addEventListener('blur', function() {
+                            this.parentElement.style.backgroundColor = '';
+                        });
+                    }
+                });
+
+                ibadahCells.forEach(cell => {
+                    const input = cell.querySelector('input');
+                    if (input) {
+                        input.addEventListener('focus', function() {
+                            this.parentElement.style.backgroundColor = '#fff3cd';
+                        });
+                        input.addEventListener('blur', function() {
+                            this.parentElement.style.backgroundColor = '';
+                        });
+                    }
+                });
+
+                keshaftaanCells.forEach(cell => {
+                    const input = cell.querySelector('input');
+                    if (input) {
+                        input.addEventListener('focus', function() {
+                            this.parentElement.style.backgroundColor = '#f8d7da';
+                        });
+                        input.addEventListener('blur', function() {
+                            this.parentElement.style.backgroundColor = '';
+                        });
+                    }
+                });
             });
 
-            // Validation for score inputs
-            document.addEventListener('input', function(e) {
-                if (e.target.type === 'number' && e.target.hasAttribute('max')) {
-                    const value = parseInt(e.target.value);
-                    const max = parseInt(e.target.getAttribute('max'));
+            // Form validation before submission
+            document.getElementById('correctionForm').addEventListener('submit', function(e) {
+                const requiredFields = document.querySelectorAll('input[name*="[nama_siswa]"], input[name*="[nis]"]');
+                let hasEmpty = false;
 
-                    if (value > max) {
-                        e.target.style.borderColor = '#dc3545';
-                        e.target.title = `Nilai tidak boleh lebih dari ${max}`;
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.style.borderColor = '#dc3545';
+                        hasEmpty = true;
                     } else {
-                        e.target.style.borderColor = '';
-                        e.target.title = '';
+                        field.style.borderColor = '';
+                    }
+                });
+
+                if (hasEmpty) {
+                    e.preventDefault();
+                    alert('Mohon lengkapi data siswa yang masih kosong (Nama dan NIS wajib diisi)');
+                    return false;
+                }
+            });
+
+            // Real-time validation for required fields
+            document.addEventListener('input', function(e) {
+                if (e.target.name && (e.target.name.includes('[nama_siswa]') || e.target.name.includes('[nis]'))) {
+                    if (e.target.value.trim()) {
+                        e.target.style.borderColor = '#28a745';
+                    } else {
+                        e.target.style.borderColor = '#dc3545';
                     }
                 }
             });
