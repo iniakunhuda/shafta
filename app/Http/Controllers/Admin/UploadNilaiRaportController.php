@@ -250,16 +250,21 @@ class UploadNilaiRaportController extends Controller
 
     public function handleStep3Save(Request $request)
     {
-        $request->validate([
-            'jenjang' => 'required|in:SMP,SMA',
-            'tahun_ajaran' => 'required|exists:tahun_ajaran,id',
-            'kelas' => 'required|exists:kelas,id',
-        ]);
+        // $request->validate([
+        //     'jenjang' => 'required|in:SMP,SMA',
+        //     'tahun_ajaran' => 'required',
+        //     'kelas' => 'required',
+        //     'jenis_dokumen' => 'string'
+        // ]);
 
         try {
 
             $raportService = new RaportService(new Raport());
-            $result = $raportService->importRaportUmum($request);
+            if (request()->jenis_dokumen == 'shafta') {
+                $result = $raportService->insertRaportShafta($request);
+            } else {
+                $result = $raportService->insertRaportUmum($request);
+            }
 
             $this->clearSession();
             if ($result['error_count'] > 0) {

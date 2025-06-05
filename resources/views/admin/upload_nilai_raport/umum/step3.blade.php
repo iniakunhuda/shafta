@@ -344,6 +344,7 @@
                             <input type="hidden" name="jenjang" value="{{ request()->jenjang }}">
                             <input type="hidden" name="tahun_ajaran" value="{{ request()->tahun_ajaran }}">
                             <input type="hidden" name="kelas" value="{{ request()->kelas }}">
+                            <input type="hidden" name="jenis_dokumen" value="{{ request()->jenis_dokumen }}">
 
                             <div class="table-container">
                                 <table class="table table-bordered table-fixed">

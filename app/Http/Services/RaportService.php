@@ -60,7 +60,7 @@ class RaportService
         return $this->raport->where('id_tahun_ajaran', $tahunAjaranId)->where('id_kelas', $kelasId)->count();
     }
 
-    public function importRaportUmum(Request $request)
+    public function insertRaportUmum(Request $request)
     {
         $students_data = session('upload_raport.students_data');
         $mata_pelajaran = session('upload_raport.mata_pelajaran');
@@ -75,16 +75,6 @@ class RaportService
 
         // First, delete existing raport data for this class, year, and academic year
         \DB::table('raport_nilai')
-            ->whereIn('id_raport', function($query) use ($request) {
-                $query->select('id')
-                    ->from('raport')
-                    ->where('import_type', 'umum')
-                    ->where('id_tahun_ajaran', $request->tahun_ajaran)
-                    ->where('id_kelas', $request->kelas);
-            })
-            ->delete();
-
-        \DB::table('raport_sikap')
             ->whereIn('id_raport', function($query) use ($request) {
                 $query->select('id')
                     ->from('raport')
@@ -135,19 +125,29 @@ class RaportService
                         ]);
                 }
 
-                // Create raport record
-                $raport_id = \DB::table('raport')->insertGetId([
-                    'id_tahun_ajaran' => $request->tahun_ajaran,
-                    'id_kelas' => $request->kelas,
-                    'id_siswa' => $siswa_id,
-                    'sakit' => $student['ketidakhadiran']['sakit'] ?? 0,
-                    'izin' => $student['ketidakhadiran']['izin'] ?? 0,
-                    'alpa' => $student['ketidakhadiran']['alpha'] ?? 0,
-                    'status' => 'draft',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'import_type' => 'umum',
-                ]);
+                // find or create raport record
+                $raport = \DB::table('raport')
+                    ->where('id_tahun_ajaran', $request->tahun_ajaran)
+                    ->where('id_kelas', $request->kelas)
+                    ->where('id_siswa', $siswa_id)
+                    ->first();
+                if ($raport) {
+                    $raport_id = $raport->id;
+                } else {
+                    // Create new raport record
+                    $raport_id = \DB::table('raport')->insertGetId([
+                        'id_tahun_ajaran' => $request->tahun_ajaran,
+                        'id_kelas' => $request->kelas,
+                        'id_siswa' => $siswa_id,
+                        'sakit' => $student['ketidakhadiran']['sakit'] ?? 0,
+                        'izin' => $student['ketidakhadiran']['izin'] ?? 0,
+                        'alpa' => $student['ketidakhadiran']['alpha'] ?? 0,
+                        'status' => 'draft',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                        'import_type' => 'umum',
+                    ]);
+                }
 
                 // Insert mata pelajaran scores
                 if (!empty($student['mata_pelajaran'])) {
@@ -244,6 +244,236 @@ class RaportService
                 'saved_count' => $saved_count,
                 'error_count' => $error_count,
                 'errors' => []
+            ];
+        }
+    }
+
+    public function insertRaportShafta(Request $request)
+    {
+        $students_data = session('upload_raport.students_data');
+        $pengembangan_bidang_studi = session('upload_raport.pengembangan_bidang_studi');
+        $ibadah = session('upload_raport.ibadah');
+        $keshaftaan = session('upload_raport.keshaftaan');
+
+        if (empty($students_data)) {
+            return redirect()->route('admin.upload-nilai-raport.step1')
+                ->with('error', 'Data tidak ditemukan. Silakan upload file terlebih dahulu.');
+        }
+
+        \DB::beginTransaction();
+
+        try {
+            // First, delete existing raport data for this class, year, and academic year
+            \DB::table('raport_nilai')
+                ->whereIn('id_raport', function($query) use ($request) {
+                    $query->select('id')
+                        ->from('raport')
+                        ->where('import_type', 'shafta')
+                        ->where('id_tahun_ajaran', $request->tahun_ajaran)
+                        ->where('id_kelas', $request->kelas);
+                })
+                ->delete();
+
+            \DB::table('raport')
+                ->where('import_type', 'shafta')
+                ->where('id_tahun_ajaran', $request->tahun_ajaran)
+                ->where('id_kelas', $request->kelas)
+                ->delete();
+
+            $saved_count = 0;
+            $error_count = 0;
+            $errors = [];
+
+            foreach ($students_data as $student) {
+                try {
+                    // Find or create student record
+                    $siswa = \DB::table('siswa')
+                        ->where('nis', $student['nis'])
+                        ->orWhere('nisn', $student['nisn'])
+                        ->first();
+
+                    if (!$siswa) {
+                        // Create new student record
+                        $siswa_id = \DB::table('siswa')->insertGetId([
+                            'nis' => $student['nis'],
+                            'nisn' => $student['nisn'],
+                            'nama' => $student['nama_siswa'],
+                            'jenis_kelamin' => 'l', // Default, can be updated later
+                            'status' => 'active',
+                            'id_kelas' => $request->kelas,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    } else {
+                        $siswa_id = $siswa->id;
+                        // Update student's class if needed
+                        \DB::table('siswa')
+                            ->where('id', $siswa_id)
+                            ->update([
+                                'id_kelas' => $request->kelas,
+                                'updated_at' => now(),
+                            ]);
+                    }
+
+                    // find or create raport record
+                    $raport = \DB::table('raport')
+                        ->where('id_tahun_ajaran', $request->tahun_ajaran)
+                        ->where('id_kelas', $request->kelas)
+                        ->where('id_siswa', $siswa_id)
+                        ->first();
+
+                    if ($raport) {
+                        $raport_id = $raport->id;
+                    } else {
+                        // Create new raport record
+                        $raport_id = \DB::table('raport')->insertGetId([
+                            'id_tahun_ajaran' => $request->tahun_ajaran,
+                            'id_kelas' => $request->kelas,
+                            'id_siswa' => $siswa_id,
+                            'sakit' => 0, // Default values for shafta
+                            'izin' => 0,
+                            'alpa' => 0,
+                            'status' => 'draft',
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                            'import_type' => 'shafta',
+                        ]);
+                    }
+
+                    // Insert pengembangan bidang studi scores
+                    if (!empty($student['pengembangan_bidang_studi'])) {
+                        foreach ($student['pengembangan_bidang_studi'] as $subject_name => $score) {
+                            if (!empty(trim($score)) && is_numeric($score)) {
+                                // Find or create pelajaran record
+                                $pelajaran = \DB::table('pelajaran')
+                                    ->where('judul', $subject_name)
+                                    ->first();
+
+                                if (!$pelajaran) {
+                                    $pelajaran_id = \DB::table('pelajaran')->insertGetId([
+                                        'judul' => $subject_name,
+                                        'kategori' => 'shafta',
+                                        'kategori_matkul' => null,
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ]);
+                                } else {
+                                    $pelajaran_id = $pelajaran->id;
+                                }
+
+                                // Insert score
+                                \DB::table('raport_nilai')->insert([
+                                    'id_raport' => $raport_id,
+                                    'id_pelajaran' => $pelajaran_id,
+                                    'nilai' => (float)$score,
+                                    'nilai_huruf' => $this->convertToGrade($score),
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]);
+                            }
+                        }
+                    }
+
+                    // Insert ibadah scores
+                    if (!empty($student['ibadah'])) {
+                        foreach ($student['ibadah'] as $ibadah_name => $score) {
+                            if (!empty(trim($score)) && is_numeric($score)) {
+                                // Find or create pelajaran record for ibadah
+                                $pelajaran = \DB::table('pelajaran')
+                                    ->where('judul', $ibadah_name)
+                                    ->first();
+
+                                if (!$pelajaran) {
+                                    $pelajaran_id = \DB::table('pelajaran')->insertGetId([
+                                        'judul' => $ibadah_name,
+                                        'kategori' => 'shafta',
+                                        'kategori_matkul' => null,
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ]);
+                                } else {
+                                    $pelajaran_id = $pelajaran->id;
+                                }
+
+                                // Insert score
+                                \DB::table('raport_nilai')->insert([
+                                    'id_raport' => $raport_id,
+                                    'id_pelajaran' => $pelajaran_id,
+                                    'nilai' => (float)$score,
+                                    'nilai_huruf' => $this->convertToGrade($score),
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]);
+                            }
+                        }
+                    }
+
+                    // Insert keshaftaan scores as hafalan records
+                    if (!empty($student['keshaftaan'])) {
+                        foreach ($student['keshaftaan'] as $hafalan_name => $score) {
+                            if (!empty(trim($score)) && is_numeric($score)) {
+                                // Find or create pelajaran record for keshaftaan
+                                $pelajaran = \DB::table('pelajaran')
+                                    ->where('judul', $hafalan_name)
+                                    ->first();
+
+                                if (!$pelajaran) {
+                                    $pelajaran_id = \DB::table('pelajaran')->insertGetId([
+                                        'judul' => $hafalan_name,
+                                        'kategori' => 'shafta',
+                                        'kategori_matkul' => null,
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ]);
+                                } else {
+                                    $pelajaran_id = $pelajaran->id;
+                                }
+
+                                // Insert score
+                                \DB::table('raport_nilai')->insert([
+                                    'id_raport' => $raport_id,
+                                    'id_pelajaran' => $pelajaran_id,
+                                    'nilai' => (float) $score,
+                                    'nilai_huruf' => $this->convertToGrade($score),
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]);
+                            }
+                        }
+                    }
+
+                    $saved_count++;
+
+                } catch (\Exception $e) {
+                    $error_count++;
+                    $errors[] = "Error saving student {$student['nama_siswa']}: " . $e->getMessage();
+                    Log::error("Error saving student data: " . $e->getMessage(), [
+                        'student' => $student,
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                }
+            }
+
+            \DB::commit();
+
+            return [
+                'status' => $error_count == 0,
+                'saved_count' => $saved_count,
+                'error_count' => $error_count,
+                'errors' => $errors
+            ];
+
+        } catch (\Exception $e) {
+            \DB::rollback();
+            Log::error("Error in insertRaportShafta: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return [
+                'status' => false,
+                'saved_count' => 0,
+                'error_count' => 1,
+                'errors' => ['Database transaction failed: ' . $e->getMessage()]
             ];
         }
     }
