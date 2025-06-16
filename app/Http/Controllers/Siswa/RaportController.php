@@ -236,24 +236,43 @@ class RaportController extends Controller
             ->orderBy('pelajaran.judul')
             ->get();
 
-        // Get keshaftaan grades grouped by kategori_matkul
+        // Get keshaftaan grades with parent information
         $nilaiKeshaftaan = DB::table('raport_nilai')
             ->join('pelajaran', 'raport_nilai.id_pelajaran', '=', 'pelajaran.id')
+            ->leftJoin('pelajaran as parent_pelajaran', 'pelajaran.id_parent_pelajaran', '=', 'parent_pelajaran.id')
             ->where('raport_nilai.id_raport', $raportData->id)
             ->where('pelajaran.kategori', 'shafta')
             ->select(
                 'pelajaran.judul as mata_pelajaran',
                 'pelajaran.kategori_matkul',
+                'pelajaran.id_parent_pelajaran',
+                'parent_pelajaran.judul as parent_judul',
                 'raport_nilai.nilai',
                 'raport_nilai.nilai_huruf',
                 'raport_nilai.catatan'
             )
-            ->orderBy('pelajaran.kategori_matkul')
+            ->orderBy('parent_pelajaran.judul')
             ->orderBy('pelajaran.judul')
             ->get();
 
-        // Group keshaftaan by category
-        $nilaiKeshaftaanGrouped = $nilaiKeshaftaan->groupBy('kategori_matkul');
+        // Group keshaftaan by parent or by kategori_matkul if no parent
+        $nilaiKeshaftaanGrouped = collect();
+
+        foreach ($nilaiKeshaftaan as $nilai) {
+            if ($nilai->id_parent_pelajaran && $nilai->parent_judul) {
+                // Group by parent subject
+                $groupKey = $nilai->parent_judul;
+            } else {
+                // Group by kategori_matkul if no parent (fallback to existing logic)
+                $groupKey = $nilai->kategori_matkul ?? 'Lainnya';
+            }
+
+            if (!$nilaiKeshaftaanGrouped->has($groupKey)) {
+                $nilaiKeshaftaanGrouped->put($groupKey, collect());
+            }
+
+            $nilaiKeshaftaanGrouped->get($groupKey)->push($nilai);
+        }
 
         // Get hafalan grades
         $nilaiHafalan = DB::table('raport_hafalan')

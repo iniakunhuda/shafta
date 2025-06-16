@@ -28,27 +28,27 @@ class RaportNilaiService
     {
         return $this->raportNilai->create($data);
     }
-    
+
     public function updateRaportNilai($id, $data)
     {
         return $this->raportNilai->find($id)->update($data);
     }
-    
+
     public function deleteRaportNilai($id)
     {
         return $this->raportNilai->find($id)->delete();
     }
-    
+
     public function getRaportNilaiBySiswaId($siswaId)
     {
         return $this->raportNilai->where('id_siswa', $siswaId)->get();
     }
-    
+
     public function getRaportNilaiByTahunAjaranId($tahunAjaranId)
     {
         return $this->raportNilai->where('id_tahun_ajaran', $tahunAjaranId)->get();
     }
-    
+
     public function getRaportNilaiUmumByRaportId($raportId)
     {
         return $this->raportNilai
@@ -72,11 +72,14 @@ class RaportNilaiService
         $raportNilaiGroupped = [];
         foreach ($raportNilai as $item) {
             $parentPelajaran = Pelajaran::find($item->pelajaran->id_parent_pelajaran);
+            if (!$parentPelajaran) {
+                continue; // Skip if no parent found
+            }
             $raportNilaiGroupped[$parentPelajaran->judul][] = $item;
         }
         return $raportNilaiGroupped;
     }
-    
+
     public function averageRaportNilaiByRaportId($raportId, $kategori)
     {
         return number_format($this->raportNilai

@@ -153,23 +153,32 @@
                         <!-- Nilai Keshaftaan Tab -->
                         <div class="tab-pane fade" id="nilai-keshaftaan-tab-pane" role="tabpanel" aria-labelledby="nilai-keshaftaan-tab" tabindex="0">
                             @if($nilaiKeshaftaanGrouped->isNotEmpty())
-                                @foreach($nilaiKeshaftaanGrouped as $kategori => $nilaiGroup)
+                                @foreach($nilaiKeshaftaanGrouped as $groupName => $nilaiGroup)
                                     <div class="mb-4">
-                                        <h5 class="
-                                            @if($kategori == 'ipa') bg-warning text-dark
-                                            @elseif($kategori == 'ips') bg-danger text-white
-                                            @elseif($kategori == 'eskul') bg-success text-white
-                                            @else bg-secondary text-white
-                                            @endif
-                                            p-2 rounded">
-                                            {{ ucfirst($kategori ?? 'Lainnya') }}
+                                        <h5 style="padding:10px;padding-left:20px" class="
+                                            @php
+                                                $lowerGroupName = strtolower($groupName);
+                                                if (str_contains($lowerGroupName, 'ipa') || $groupName == 'ipa') {
+                                                    echo 'bg-warning text-dark';
+                                                } elseif (str_contains($lowerGroupName, 'ips') || $groupName == 'ips') {
+                                                    echo 'bg-danger text-white';
+                                                } elseif (str_contains($lowerGroupName, 'eskul') || $groupName == 'eskul') {
+                                                    echo 'bg-success text-white';
+                                                } elseif (str_contains($lowerGroupName, 'quran') || str_contains($lowerGroupName, 'hadist') || str_contains($lowerGroupName, 'fiqh') || str_contains($lowerGroupName, 'akhlaq')) {
+                                                    echo 'bg-primary text-white';
+                                                } else {
+                                                    echo '';
+                                                }
+                                            @endphp
+                                            bg-secondary text-white rounded">
+                                            {{ $groupName }}
                                         </h5>
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-striped">
                                                 <thead class="bg-light">
                                                     <tr>
                                                         <th>NO</th>
-                                                        <th>KATEGORI</th>
+                                                        <th>MATA PELAJARAN</th>
                                                         <th>NILAI/PREDIKAT</th>
                                                         <th>KETERANGAN</th>
                                                     </tr>
@@ -179,11 +188,40 @@
                                                         <tr>
                                                             <td>{{ $index + 1 }}</td>
                                                             <td>{{ $nilai->mata_pelajaran }}</td>
-                                                            <td>{{ $nilai->nilai ?? ($nilai->nilai_huruf ?? '-') }}</td>
-                                                            <td>{{ $nilai->catatan ?? ($nilai->nilai ? \App\Helpers\GradeHelper::getKeterangan($nilai->nilai) : '-') }}</td>
+                                                            <td>
+                                                                @if($nilai->nilai)
+                                                                    <span>
+                                                                        {{ $nilai->nilai }}
+                                                                    </span>
+                                                                @elseif($nilai->nilai_huruf)
+                                                                    <span>{{ $nilai->nilai_huruf }}</span>
+                                                                @else
+                                                                    <span class="text-muted">-</span>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if($nilai->catatan)
+                                                                    {{ $nilai->catatan }}
+                                                                @elseif($nilai->nilai && class_exists('App\Helpers\GradeHelper'))
+                                                                    {{ \App\Helpers\GradeHelper::getKeterangan($nilai->nilai) }}
+                                                                @else
+                                                                    <span class="text-muted">-</span>
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
+                                                @if($nilaiGroup->where('nilai', '!=', null)->isNotEmpty())
+                                                    <tfoot class="table-info">
+                                                        <tr>
+                                                            <td colspan="2" class="text-end fw-bold">Rata-rata Kelompok</td>
+                                                            <td class="fw-bold">
+                                                                {{ number_format($nilaiGroup->where('nilai', '!=', null)->avg('nilai'), 2) }}
+                                                            </td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                @endif
                                             </table>
                                         </div>
                                     </div>
@@ -192,7 +230,9 @@
                                 <!-- Hafalan Section -->
                                 @if($nilaiHafalan->isNotEmpty())
                                     <div class="mb-4">
-                                        <h5 class="bg-info text-white p-2 rounded">Hafalan</h5>
+                                        <h5 class="bg-info text-white p-2 rounded">
+                                            <i class="ph ph-book-open me-2"></i>Hafalan
+                                        </h5>
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-striped">
                                                 <thead class="bg-light">
@@ -208,8 +248,32 @@
                                                         <tr>
                                                             <td>{{ $index + 1 }}</td>
                                                             <td>{{ $hafalan->judul }}</td>
-                                                            <td>{{ $hafalan->nilai ?? ($hafalan->nilai_huruf ?? '-') }}</td>
-                                                            <td>{{ $hafalan->catatan ?? ($hafalan->nilai ? \App\Helpers\GradeHelper::getKeterangan($hafalan->nilai) : '-') }}</td>
+                                                            <td>
+                                                                @if($hafalan->nilai)
+                                                                    <span class="badge
+                                                                        @if($hafalan->nilai >= 85) bg-success
+                                                                        @elseif($hafalan->nilai >= 75) bg-warning
+                                                                        @elseif($hafalan->nilai >= 65) bg-info
+                                                                        @else bg-danger
+                                                                        @endif
+                                                                    ">
+                                                                        {{ $hafalan->nilai }}
+                                                                    </span>
+                                                                @elseif($hafalan->nilai_huruf)
+                                                                    <span class="badge bg-primary">{{ $hafalan->nilai_huruf }}</span>
+                                                                @else
+                                                                    <span class="text-muted">-</span>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if($hafalan->catatan)
+                                                                    {{ $hafalan->catatan }}
+                                                                @elseif($hafalan->nilai && class_exists('App\Helpers\GradeHelper'))
+                                                                    {{ \App\Helpers\GradeHelper::getKeterangan($hafalan->nilai) }}
+                                                                @else
+                                                                    <span class="text-muted">-</span>
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -219,26 +283,40 @@
                                 @endif
 
                                 <!-- Summary Section -->
-                                <div class="mt-4">
+                                {{-- <div class="mt-4">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="card h-100">
                                                 <div class="card-header bg-main-50">
-                                                    <h6 class="mb-0">Ringkasan Nilai Keshaftaan</h6>
+                                                    <h6 class="mb-0"><i class="ph ph-chart-line me-2"></i>Ringkasan Nilai Keshaftaan</h6>
                                                 </div>
                                                 <div class="card-body">
                                                     <table class="table table-bordered">
                                                         <tr>
-                                                            <td width="50%">Rata-rata Nilai</td>
-                                                            <td class="fw-bold">{{ number_format($summaryStats['rata_rata_keshaftaan'], 2) }}</td>
+                                                            <td width="60%">Rata-rata Nilai Keshaftaan</td>
+                                                            <td class="fw-bold text-primary">{{ number_format($summaryStats['rata_rata_keshaftaan'], 2) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Predikat Sikap</td>
-                                                            <td class="fw-bold">{{ $summaryStats['predikat_sikap'] }}</td>
+                                                            <td>
+                                                                <span class="badge
+                                                                    @if($summaryStats['predikat_sikap'] == 'A') bg-success
+                                                                    @elseif($summaryStats['predikat_sikap'] == 'B') bg-primary
+                                                                    @elseif($summaryStats['predikat_sikap'] == 'C') bg-warning
+                                                                    @else bg-danger
+                                                                    @endif
+                                                                ">
+                                                                    {{ $summaryStats['predikat_sikap'] }}
+                                                                </span>
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Nilai Hafalan</td>
-                                                            <td class="fw-bold">{{ number_format($summaryStats['nilai_hafalan'], 2) }}</td>
+                                                            <td>Rata-rata Nilai Hafalan</td>
+                                                            <td class="fw-bold text-success">{{ number_format($summaryStats['nilai_hafalan'], 2) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Total Mata Pelajaran</td>
+                                                            <td class="fw-bold">{{ $nilaiKeshaftaanGrouped->flatten()->count() + $nilaiHafalan->count() }}</td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -247,22 +325,51 @@
                                         <div class="col-md-6">
                                             <div class="card h-100">
                                                 <div class="card-header bg-main-50">
-                                                    <h6 class="mb-0">Catatan Guru Keshaftaan</h6>
+                                                    <h6 class="mb-0"><i class="ph ph-note-pencil me-2"></i>Catatan Guru Keshaftaan</h6>
                                                 </div>
                                                 <div class="card-body">
                                                     @if($raportData && $raportData->prestasi)
-                                                        <p>{{ $raportData->prestasi }}</p>
+                                                        <div class="alert alert-success">
+                                                            <strong>Prestasi:</strong>
+                                                            <p class="mb-0 mt-2">{{ $raportData->prestasi }}</p>
+                                                        </div>
                                                     @else
-                                                        <p>Siswa menunjukkan kedisiplinan dan kemampuan yang baik dalam aspek keshaftaan.</p>
+                                                        <div class="alert alert-info">
+                                                            <p class="mb-0">Siswa menunjukkan kedisiplinan dan kemampuan yang baik dalam aspek keshaftaan. Diharapkan dapat mempertahankan dan meningkatkan prestasi yang telah dicapai.</p>
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Progress indicator -->
+                                                    @if($summaryStats['rata_rata_keshaftaan'] > 0)
+                                                        <div class="mt-3">
+                                                            <small class="text-muted">Progress Keseluruhan:</small>
+                                                            <div class="progress mt-1">
+                                                                <div class="progress-bar
+                                                                    @if($summaryStats['rata_rata_keshaftaan'] >= 85) bg-success
+                                                                    @elseif($summaryStats['rata_rata_keshaftaan'] >= 75) bg-warning
+                                                                    @elseif($summaryStats['rata_rata_keshaftaan'] >= 65) bg-info
+                                                                    @else bg-danger
+                                                                    @endif
+                                                                "
+                                                                role="progressbar"
+                                                                style="width: {{ min($summaryStats['rata_rata_keshaftaan'], 100) }}%"
+                                                                aria-valuenow="{{ $summaryStats['rata_rata_keshaftaan'] }}"
+                                                                aria-valuemin="0"
+                                                                aria-valuemax="100">
+                                                                    {{ number_format($summaryStats['rata_rata_keshaftaan'], 1) }}%
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             @else
                                 <div class="alert alert-info">
-                                    <p class="mb-0">Belum ada data nilai keshaftaan untuk semester ini.</p>
+                                    <i class="ph ph-info me-2"></i>
+                                    <strong>Informasi:</strong> Belum ada data nilai keshaftaan untuk semester ini.
                                 </div>
                             @endif
                         </div>
