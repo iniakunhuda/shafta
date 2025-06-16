@@ -73,7 +73,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="h6 mb-0 fw-medium text-gray-300">{{ $siswa->updated_at->format('d M Y H:i') }}</span>
+                                    <span class="h6 mb-0 fw-medium text-gray-300">{{ $siswa->updated_at?->format('d M Y H:i') }}</span>
                                 </td>
                                 <td>
                                     <div class="dropdown">

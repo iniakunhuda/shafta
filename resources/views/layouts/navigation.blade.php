@@ -19,16 +19,16 @@
                 </li>
 
                 @if(Auth::user()->isSiswa())
-                <li class="sidebar-menu__item">
-                    <a href="/siswa/raport.php" class="sidebar-menu__link">
+                <li class="sidebar-menu__item {{ request()->is('siswa/raport*') ? 'activePage' : '' }}">
+                    <a href="{{ route('siswa.raport.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-book-open-text"></i></span>
                         <span class="text">Lihat Raport</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item">
-                    <a href="/siswa/detail-raport.php" class="sidebar-menu__link">
-                        <span class="icon"><i class="ph ph-book"></i></span>
-                        <span class="text">Detail Raport</span>
+                <li class="sidebar-menu__item {{ request()->is('siswa/kalender*') ? 'activePage' : '' }}">
+                    <a href="{{ route('siswa.kalender.index') }}" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-calendar-dots"></i></span>
+                        <span class="text">Kalender</span>
                     </a>
                 </li>
                 @endif
@@ -40,13 +40,13 @@
                         <span class="text">Tahun Ajaran</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item {{ request()->is('admin/kelas*') ? 'activePage' : '' }}"">
+                <li class="sidebar-menu__item {{ request()->is('admin/kelas*') ? 'activePage' : '' }}">
                     <a href="{{ route('admin.kelas.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-door-open"></i></span>
                         <span class="text">Kelas</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item {{ request()->is('admin/siswa*') ? 'activePage' : '' }}"">
+                <li class="sidebar-menu__item {{ request()->is('admin/siswa*') ? 'activePage' : '' }}">
                     <a href="{{ route('admin.siswa.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-users-three"></i></span>
                         <span class="text">Siswa</span>
@@ -58,13 +58,13 @@
                         <span class="text">Nilai Raport (Proses)</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item {{ request()->is('admin/upload-nilai*') ? 'activePage' : '' }}"">
+                <li class="sidebar-menu__item {{ request()->is('admin/upload-nilai*') ? 'activePage' : '' }}">
                     <a href="{{ route('admin.upload-nilai-raport.step1') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-upload"></i></span>
                         <span class="text">Upload Nilai Raport</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item {{ request()->is('admin/kalender*') ? 'activePage' : '' }}"">
+                <li class="sidebar-menu__item {{ request()->is('admin/kalender*') ? 'activePage' : '' }}">
                     <a href="{{ route('admin.kalender.index') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-calendar-dots"></i></span>
                         <span class="text">Kalender</span>
@@ -87,7 +87,7 @@
                         <span class="text">Akun Siswa</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item {{ request()->is('superadmin/settings*') ? 'activePage' : '' }}"">
+                <li class="sidebar-menu__item {{ request()->is('superadmin/settings*') ? 'activePage' : '' }}">
                     <a href="{{ route('admin.settings') }}" class="sidebar-menu__link">
                         <span class="icon"><i class="ph ph-gear"></i></span>
                         <span class="text">Pengaturan</span>

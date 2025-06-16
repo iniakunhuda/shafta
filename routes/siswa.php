@@ -10,6 +10,9 @@ Route::middleware(['auth', 'role:siswa'])->prefix('siswa')->group(function () {
     Route::get('/raport', 'App\Http\Controllers\Siswa\RaportController@index')->name('siswa.raport.index');
     Route::get('/raport/{id}', 'App\Http\Controllers\Siswa\RaportController@show')->name('siswa.raport.show');
 
+    // Kalender
+    Route::get('/kalender', 'App\Http\Controllers\Siswa\KalenderController@index')->name('siswa.kalender.index');
+
     // View Hafalan
     Route::get('/hafalan', 'App\Http\Controllers\Siswa\HafalanController@index')->name('siswa.hafalan.index');
 

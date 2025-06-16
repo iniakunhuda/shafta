@@ -20,8 +20,7 @@ Route::middleware('auth')->get('/dashboard', function () {
         return redirect()->route('siswa.dashboard');
     }
 
-    // Fallback
-    return view('dashboard');
+    return view('siswa.dashboard');
 })->name('dashboard');
 
 require __DIR__.'/auth.php';
