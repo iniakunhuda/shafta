@@ -205,7 +205,7 @@ $notifications = [
                 <!-- Subject Performance Card End -->
 
                 <!-- Recent Grades Card Start -->
-                <div class="card mb-24">
+                {{-- <div class="card mb-24">
                     <div class="card-header border-bottom border-gray-100">
                         <div class="mb-0 flex-between flex-wrap gap-8">
                             <h5 class="mb-0">Nilai Terbaru</h5>
@@ -268,7 +268,7 @@ $notifications = [
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Recent Grades Card End -->
 
                 <!-- Hafalan Progress Card Start -->
@@ -401,7 +401,7 @@ $notifications = [
                 <!-- Academic Ranking Card End -->
 
                 <!-- Upcoming Events Card Start -->
-                <div class="card mb-24">
+                {{-- <div class="card mb-24">
                     <div class="card-header border-bottom border-gray-100">
                         <h5 class="mb-0">Jadwal Ujian & Tugas</h5>
                     </div>
@@ -422,11 +422,11 @@ $notifications = [
                         <?php endforeach; ?>
                         <a href="#" class="btn btn-outline-main w-100 rounded-pill mt-16">Lihat Semua Jadwal</a>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Upcoming Events Card End -->
 
                 <!-- Achievement Card Start -->
-                <div class="card mb-24">
+                {{-- <div class="card mb-24">
                     <div class="card-header border-bottom border-gray-100">
                         <h5 class="mb-0">Pencapaian Terbaru</h5>
                     </div>
@@ -459,7 +459,7 @@ $notifications = [
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Achievement Card End -->
             </div>
         </div>

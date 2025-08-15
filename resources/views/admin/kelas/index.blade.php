@@ -37,6 +37,7 @@
                     <thead>
                         <tr>
                             <th class="h6 text-gray-300">No</th>
+                            <th class="h6 text-gray-300">Jenjang</th>
                             <th class="h6 text-gray-300">Nama</th>
                             <th class="h6 text-gray-300">Tahun Ajaran</th>
                             <th class="h6 text-gray-300">Maksimum</th>
@@ -48,6 +49,9 @@
                         @forelse ($kelas as $index => $k)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
+                                <td>
+                                    <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->jenjang }}</span>
+                                </td>
                                 <td>
                                     <span class="h6 mb-0 fw-medium text-gray-300">{{ $k->nama }}</span>
                                 </td>

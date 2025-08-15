@@ -21,6 +21,9 @@
                 background-color: hsl(var(--main)) !important;
                 border-color: hsl(var(--main)) !important;
             }
+            .fc-daygrid-day-number, .fc .fc-col-header-cell-cushion {
+                color: hsl(var(--text)) !important;
+            }
         </style>
     </x-slot>
 
@@ -145,7 +148,7 @@
                                         Batal
                                     </button>
                                     <button type="submit" class="btn bg-main-600 hover-bg-main-800 border-main-600 hover-border-main-800 text-md px-24 py-12 radius-8">
-                                        Simpan Perubahan
+                                        Simpan
                                     </button>
                                 </div>
                             </div>

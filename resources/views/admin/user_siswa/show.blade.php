@@ -91,13 +91,13 @@
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
                             <span class="text-gray-400 mb-2 fw-normal">Tanggal Pendaftaran</span>
-                            <span class="h5 fw-semibold">{{ $siswa->created_at->format('d F Y H:i:s') }}</span>
+                            <span class="h5 fw-semibold">{{ $siswa->created_at?->format('d F Y H:i:s') }}</span>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="d-flex flex-column">
                             <span class="text-gray-400 mb-2 fw-normal">Terakhir Diperbarui</span>
-                            <span class="h5 fw-semibold">{{ $siswa->updated_at->format('d F Y H:i:s') }}</span>
+                            <span class="h5 fw-semibold">{{ $siswa->updated_at?->format('d F Y H:i:s') }}</span>
                         </div>
                     </div>
                 </div>

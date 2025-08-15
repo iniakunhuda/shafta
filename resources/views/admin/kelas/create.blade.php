@@ -29,6 +29,24 @@
                 <form action="{{ route('admin.kelas.store') }}" method="POST">
                     @csrf
                     <div class="row g-20">
+
+                        <div class="col-md-6">
+                            <label for="nama" class="h5 mb-8 fw-normal font-heading">Jenjang <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <select class="form-control py-11 @error('jenjang') is-invalid @enderror" id="jenjang" name="jenjang" required>
+                                    <option value="" disabled selected>Pilih Jenjang</option>
+                                    <option value="SMP" {{ old('jenjang') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                                    <option value="SMA" {{ old('jenjang') == 'SMA' ? 'selected' : '' }}>SMA</option>
+                                </select>
+
+                                @error('jenjang')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="col-md-6">
                             <label for="nama" class="h5 mb-8 fw-normal font-heading">Nama Kelas <span class="text-danger">*</span></label>
                             <div class="position-relative">

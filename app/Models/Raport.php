@@ -9,6 +9,11 @@ class Raport extends Model
 {
     use HasFactory;
 
+    // Status constants
+    const STATUS_DRAFT = 'draft';
+    const STATUS_PUBLISHED = 'published';
+    const STATUS_ARCHIVED = 'archived';
+
     /**
      * The table associated with the model.
      *
@@ -30,6 +35,7 @@ class Raport extends Model
         'alpa',
         'catatan',
         'prestasi',
+        'status'
     ];
 
     /**
@@ -81,5 +87,30 @@ class Raport extends Model
     public function sikaps()
     {
         return $this->hasMany(RaportSikap::class, 'id_raport');
+    }
+
+    /**
+     * Filter by status draft
+     */
+    public function scopeDraft($query)
+    {
+        return $query->where('status', self::STATUS_DRAFT);
+    }
+
+    /**
+     * Filter by status published
+     */
+
+    public function scopePublished($query)
+    {
+        return $query->where('status', self::STATUS_PUBLISHED);
+    }
+
+    /**
+     * Filter by status archived
+     */
+    public function scopeArchived($query)
+    {
+        return $query->where('status', self::STATUS_ARCHIVED);
     }
 }

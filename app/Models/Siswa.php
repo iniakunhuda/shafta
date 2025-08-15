@@ -38,6 +38,7 @@ class Siswa extends Model
         'ibu_pekerjaan',
         'status',
         'id_user',
+        'id_kelas'
     ];
 
     /**
@@ -58,6 +59,14 @@ class Siswa extends Model
     }
 
     /**
+     * Get the kelas record associated with the siswa.
+     */
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas');
+    }
+
+    /**
      * Get the raports for the siswa.
      */
     public function raports()
@@ -71,5 +80,14 @@ class Siswa extends Model
     public function raportHafalans()
     {
         return $this->hasMany(RaportHafalan::class, 'id_siswa');
+    }
+
+    public function getPhotoUrlAttribute()
+    {
+        if (!$this->photo) {
+            return asset('assets/images/thumbs/setting-profile-img.jpg');
+        }
+
+        return asset('storage/siswa/' . $this->photo);
     }
 }

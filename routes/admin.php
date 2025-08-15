@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\PengaturanWebsiteController;
 use App\Http\Controllers\Admin\TahunAjaranController;
 use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\UploadNilaiRaportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Superadmin\UserAdminController;
@@ -18,7 +19,7 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
     // User Management
     Route::resource('user/siswa', UserSiswaController::class)->names('admin.user_siswa');
     Route::put('user/siswa/{user}/toggle-status', [UserSiswaController::class, 'toggleStatus'])->name('admin.user_siswa.toggle-status');
-    
+
     Route::resource('user/admin', UserAdminController::class)->names('admin.user_admin');
     Route::put('user/admin/{user}/toggle-status', [UserAdminController::class, 'toggleStatus'])->name('admin.user_admin.toggle-status');
 
@@ -26,6 +27,9 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
     Route::get('/settings', [PengaturanWebsiteController::class, 'index'])->name('admin.settings');
     Route::put('/settings', [PengaturanWebsiteController::class, 'update'])->name('admin.settings.update');
 });
+
+Route::get('/admin/siswa/{id}/export/csv', [App\Http\Controllers\Admin\SiswaController::class, 'exportCsv'])->name('admin.siswa.export.csv');
+Route::get('/admin/siswa/{id}/export/excel', [App\Http\Controllers\Admin\SiswaController::class, 'exportExcel'])->name('admin.siswa.export.excel');
 
 
 // Admin Routes
@@ -49,4 +53,15 @@ Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->group(fun
     Route::put('siswa/{id}/toggle-active',[SiswaController::class, 'toggleActive'])
         ->name('admin.siswa.toggle-active');
     Route::resource('kelas', KelasController::class)->names('admin.kelas');
+
+    Route::controller(UploadNilaiRaportController::class)->prefix('upload-nilai')->group(function () {
+        Route::get('/', 'step1')->name('admin.upload-nilai-raport.step1');
+        Route::post('upload-step1', 'handleStep1Save')->name('admin.upload-nilai-raport.step1.handleUpload');
+        Route::get('step2', 'step2')->name('admin.upload-nilai-raport.step2');
+        Route::post('step2-save', 'handleStep2Save')->name('admin.upload-nilai-raport.step2.save');
+        Route::get('step3', 'step3')->name('admin.upload-nilai-raport.step3');
+        Route::post('step3-save', 'handleStep3Save')->name('admin.upload-nilai-raport.step3.save');
+        Route::get('clear-session', 'clearSession')->name('admin.upload-nilai-raport.clear-session');
+    });
+
 });
